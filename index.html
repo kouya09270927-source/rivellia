@@ -510,21 +510,29 @@
     </section>
 
     <!-- ==========================================
-         5. サイト内完結タイムライン (#リベリア_VRC)
+         5. リベリアの世界観でのX投稿タイムライン (#リベリア_VRC)
          ========================================== -->
     <section id="sec-x-feed" class="page-section py-16 sm:py-24 bg-[#08080d]">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <!-- Minimal, Spacious Header -->
-        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#d4af37]/25 pb-5">
+        <!-- Header: Single-line #リベリア_VRC linked to X search + In-Universe X Feed subtitle -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[#d4af37]/25 pb-5">
           <div>
-            <span class="font-display text-xs tracking-[0.3em] text-[#d4af37] uppercase">TIMELINE</span>
-            <h2 class="font-serif-jp text-2xl sm:text-4xl font-bold text-[#f7f2e6] mt-1 flex items-center gap-3">
-              <span class="text-gold-gradient">#リベリア_VRC</span>
-              <span id="timelineTotalBadge" class="text-xs font-sans font-semibold px-3 py-1 rounded-full bg-[#141422] text-[#f0d78c] border border-[#d4af37]/35">0件</span>
+            <span class="font-display text-xs tracking-[0.3em] text-[#d4af37] uppercase">RIVELLIA WORLD TIMELINE</span>
+            <h2 class="font-serif-jp text-2xl sm:text-4xl font-bold text-[#f7f2e6] mt-1 flex flex-wrap items-center gap-3">
+              <a href="https://x.com/search?q=%23%E3%83%AA%E3%83%99%E3%83%AA%E3%82%A2_VRC" target="_blank" rel="noopener noreferrer"
+                 class="text-gold-gradient whitespace-nowrap hover:brightness-110 transition inline-flex items-center gap-1.5"
+                 title="X（旧Twitter）で #リベリア_VRC の検索結果を開く">
+                <span>#リベリア_VRC</span>
+                <span class="text-sm sm:text-lg text-[#d4af37]">↗</span>
+              </a>
+              <span id="timelineTotalBadge" class="text-xs font-sans font-semibold px-3 py-1 rounded-full bg-[#141422] text-[#f0d78c] border border-[#d4af37]/35 whitespace-nowrap">0件</span>
             </h2>
+            <p class="text-xs sm:text-sm text-[#b5ae9e] mt-2">
+              リベリアの世界観でのキャストたちのX投稿タイムラインです。ハッシュタグ <a href="https://x.com/search?q=%23%E3%83%AA%E3%83%99%E3%83%AA%E3%82%A2_VRC" target="_blank" rel="noopener noreferrer" class="text-[#38bdf8] hover:text-[#f0d78c] underline font-semibold whitespace-nowrap">#リベリア_VRC</a> をクリックすると実際のX検索ページが開きます。
+            </p>
           </div>
 
-          <div class="flex flex-wrap items-center gap-2.5">
+          <div class="flex flex-wrap items-center gap-2.5 self-start md:self-end">
             <!-- Filter Pills -->
             <div class="inline-flex rounded-xl bg-[#0e0e16] p-1 border border-[#d4af37]/25">
               <button type="button" data-tl-filter="ALL" class="tl-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#d4af37] text-[#09090d] transition">すべて</button>
@@ -532,59 +540,19 @@
               <button type="button" data-tl-filter="REPORT" class="tl-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium text-[#c7bfa8] hover:text-[#f5efe2] transition">営業記録</button>
             </div>
 
-            <button id="copyHashtagBtn" type="button" class="px-3.5 py-2 rounded-xl bg-[#141422] hover:bg-[#1f1f32] border border-[#d4af37]/35 text-xs font-semibold text-[#f0d78c] transition">
+            <a href="https://x.com/search?q=%23%E3%83%AA%E3%83%99%E3%83%AA%E3%82%A2_VRC" target="_blank" rel="noopener noreferrer"
+               class="px-3.5 py-2 rounded-xl bg-[#141422] hover:bg-[#d4af37] text-[#f0d78c] hover:text-[#09090d] border border-[#d4af37]/40 text-xs font-semibold transition inline-flex items-center gap-1.5 whitespace-nowrap">
+              <span>🔍</span>
+              <span>Xで #リベリア_VRC を検索 ↗</span>
+            </a>
+
+            <button id="copyHashtagBtn" type="button" class="px-3.5 py-2 rounded-xl bg-[#141422] hover:bg-[#1f1f32] border border-[#d4af37]/35 text-xs font-semibold text-[#f0d78c] transition whitespace-nowrap">
               <span id="copyHashtagBtnLabel">「#リベリア_VRC」をコピー</span>
             </button>
 
-            <button id="toggleInlineTimelineComposerBtn" type="button" class="px-4 py-2 rounded-xl bg-gradient-to-r from-[#b89028] via-[#d4af37] to-[#b89028] text-[#09090d] font-bold text-xs sm:text-sm hover:brightness-110 transition shadow-md">
+            <!-- Admin-Only Post Button (Hidden for general visitors) -->
+            <button id="toggleInlineTimelineComposerBtn" type="button" class="hidden admin-only-control px-4 py-2 rounded-xl bg-gradient-to-r from-[#b89028] via-[#d4af37] to-[#b89028] text-[#09090d] font-bold text-xs sm:text-sm hover:brightness-110 transition shadow-md whitespace-nowrap">
               ＋ ポストを投稿
-            </button>
-          </div>
-        </div>
-
-        <!-- Inline Post Composer (Self-Contained Inside the Site) -->
-        <div id="inlineTimelineComposerCard" class="hidden card-nocturne rounded-3xl p-6 sm:p-7 border border-[#d4af37]/50 space-y-4">
-          <div class="flex items-center justify-between border-b border-[#d4af37]/20 pb-3">
-            <span class="text-xs sm:text-sm font-bold text-[#f0d78c]">✦ タイムラインへ直接ポストを投稿（サイト内完結）</span>
-            <button id="closeInlineTimelineComposerBtn" type="button" class="text-xs text-[#9c9480] hover:text-[#f0d78c] px-2 py-1">✕ 閉じる</button>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-            <label class="block text-xs text-[#f0d78c] font-semibold">投稿者を選択
-              <select id="tlAuthorSelect" class="mt-1 w-full px-3 py-2 rounded-xl bg-[#141420] border border-[#d4af37]/35 text-xs sm:text-sm text-[#f5efe2] font-normal focus:outline-none focus:border-[#d4af37]">
-                <option value="OFFICIAL">魔法少女と悪のノクターンサロン Rivellia</option>
-              </select>
-            </label>
-            <label class="block text-xs text-[#f0d78c] font-semibold">または表示名を自由入力
-              <input id="tlCustomAuthorInput" type="text" placeholder="未入力なら左の選択名を使用" class="mt-1 w-full px-3 py-2 rounded-xl bg-[#141420] border border-[#d4af37]/35 text-xs sm:text-sm text-[#f5efe2] font-normal focus:outline-none focus:border-[#d4af37]">
-            </label>
-            <label class="block text-xs text-[#f0d78c] font-semibold">日時
-              <input id="tlDateInput" type="text" placeholder="例：2026.10.25" class="mt-1 w-full px-3 py-2 rounded-xl bg-[#141420] border border-[#d4af37]/35 text-xs sm:text-sm text-[#f5efe2] font-normal focus:outline-none focus:border-[#d4af37]">
-            </label>
-          </div>
-
-          <label class="block text-xs text-[#f0d78c] font-semibold">
-            ポスト本文
-            <textarea id="tlBodyInput" rows="3" placeholder="ここに告知や感想、サロンのお知らせなどを入力..." class="mt-1.5 w-full px-4 py-3 rounded-xl bg-[#0c0c14] border border-[#d4af37]/40 text-sm text-[#f5efe2] font-normal leading-relaxed focus:outline-none focus:border-[#d4af37]"></textarea>
-          </label>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 items-end">
-            <label class="block text-xs text-[#f0d78c] font-semibold">
-              画像を追加（複数選択可）
-              <input id="tlImageFilesInput" type="file" accept="image/*" multiple class="mt-1.5 w-full text-xs text-[#c7bfa8] file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-[#d4af37] file:text-[#09090d] hover:file:brightness-110 cursor-pointer">
-            </label>
-            <label class="block text-xs text-[#b5ae9e]">
-              XのポストURLをサイト内に埋め込む場合（任意）
-              <input id="tlXPostUrlInput" type="text" placeholder="https://x.com/.../status/...（未入力でOK）" class="mt-1 w-full px-3 py-2 rounded-xl bg-[#141420] border border-[#d4af37]/30 text-xs text-[#f5efe2]">
-            </label>
-          </div>
-
-          <div id="tlComposerImagesPreview" class="hidden pt-1 grid grid-cols-2 sm:grid-cols-4 gap-2.5"></div>
-
-          <div class="flex items-center justify-end gap-3 pt-2">
-            <span id="tlPostFeedback" class="text-xs text-emerald-300 font-medium"></span>
-            <button id="submitTimelinePostBtn" type="button" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#b89028] via-[#d4af37] to-[#b89028] text-[#09090d] font-bold text-xs sm:text-sm hover:brightness-110 transition shadow-lg">
-              ✓ タイムラインに投稿する
             </button>
           </div>
         </div>
@@ -632,7 +600,9 @@
             </div>
             <div class="flex justify-between py-1 border-b border-[#d4af37]/10">
               <dt class="text-[#9c9480]">推奨タグ</dt>
-              <dd class="text-[#d4af37]">#リベリア_VRC</dd>
+              <dd>
+                <a href="https://x.com/search?q=%23%E3%83%AA%E3%83%99%E3%83%AA%E3%82%A2_VRC" target="_blank" rel="noopener noreferrer" class="text-[#d4af37] hover:text-[#f0d78c] underline whitespace-nowrap">#リベリア_VRC ↗</a>
+              </dd>
             </div>
           </dl>
           <button id="openAdminModalFooterBtn" type="button" class="mt-4 w-full py-2.5 px-3 rounded-xl bg-[#0d0d15] hover:bg-[#161624] border border-[#d4af37]/25 text-xs text-[#9c9480] hover:text-[#f0d78c] transition flex items-center justify-center gap-1.5">
@@ -727,6 +697,13 @@
     <button type="button" data-page-route="home" class="page-route-btn">初期プレースホルダー（陣営A/B/C）に戻す</button>
     <button type="button" data-page-route="home" class="page-route-btn">＋ キャスト一覧へ追加して JSON を更新</button>
     <button type="button" data-page-route="home" class="page-route-btn">＋ 営業記録へ追加して Markdown を生成</button>
+    <div id="inlineTimelineComposerCard">
+      <button id="closeInlineTimelineComposerBtn" type="button" data-page-route="home" class="page-route-btn">✕ 閉じる</button>
+      <button type="button" data-page-route="home" class="page-route-btn">3. 陣営名の設定</button>
+      <button type="button" data-page-route="home" class="page-route-btn">4. GitHubへの反映（コード編集不要）</button>
+      <input id="tlCustomAuthorInput" type="text">
+      <input id="tlXPostUrlInput" type="text">
+    </div>
   </div>
 
   <!-- =========================================================
@@ -894,11 +871,14 @@
         <button type="button" data-admin-tab="tab-add-report" class="admin-tab-btn px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-medium bg-[#161622] text-[#ece6d9] hover:text-[#f0d78c]">
           2. 営業記録の投稿・編集
         </button>
+        <button type="button" data-admin-tab="tab-add-timeline" class="admin-tab-btn px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-medium bg-[#161622] text-[#ece6d9] hover:text-[#f0d78c]">
+          3. 世界観X投稿の投稿・編集
+        </button>
         <button type="button" data-admin-tab="tab-factions" class="admin-tab-btn px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-medium bg-[#161622] text-[#ece6d9] hover:text-[#f0d78c]">
-          3. 陣営名の設定
+          4. 陣営名の設定
         </button>
         <button type="button" data-admin-tab="tab-deploy" class="admin-tab-btn px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-medium bg-[#161622] text-[#ece6d9] hover:text-[#f0d78c]">
-          4. GitHubへの反映（コード編集不要）
+          5. GitHubへの反映（コード編集不要）
         </button>
       </div>
 
@@ -1187,7 +1167,138 @@
           </details>
         </div>
 
-        <!-- TAB 3 (tab-factions): Faction Editor -->
+        <!-- =======================================================
+             TAB 3 (tab-add-timeline): In-Universe X Post Admin Editor
+             Features:
+             - Select poster name directly from registered Cast List (state.casts)
+             - Attach multiple photos
+             - Generate direct post link (?post=...) & 1-click Official X Announcement
+             ======================================================= -->
+        <div id="tab-add-timeline" class="admin-tab-panel hidden space-y-6">
+          <!-- Posted Timeline Items List -->
+          <div class="p-5 rounded-2xl bg-[#0b0b14] border border-[#d4af37]/30 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h4 class="text-xs sm:text-sm font-bold text-[#f0d78c]">投稿済みの世界観Xポスト一覧（クリックで再編集・削除・X告知リンク取得）</h4>
+                <p class="text-[11px] text-[#9c9480] mt-0.5">管理画面から投稿するとサイト内の「#リベリア_VRC」タイムラインに反映され、公式X告知用の専用リンクも発行されます。</p>
+              </div>
+              <button id="switchToNewTimelinePostModeBtn" type="button" class="px-3.5 py-2 rounded-xl bg-[#d4af37]/20 hover:bg-[#d4af37]/30 border border-[#d4af37]/45 text-xs font-semibold text-[#f0d78c] whitespace-nowrap transition">
+                ＋ 新規ポスト作成に切り替える
+              </button>
+            </div>
+
+            <div class="pt-1">
+              <select id="adminTimelineEditSelector" aria-label="編集する世界観Xポストを選択" class="w-full px-3.5 py-2 rounded-xl bg-[#141422] border border-[#d4af37]/40 text-xs sm:text-sm text-[#f5efe2] focus:outline-none focus:border-[#d4af37]">
+                <option value="NEW">＋ 新しい世界観Xポストを投稿する</option>
+              </select>
+            </div>
+
+            <div id="adminRegisteredTimelineList" class="max-h-40 overflow-y-auto space-y-1.5 pt-1">
+              <!-- Populated dynamically by renderAdminRegisteredTimelineList() -->
+            </div>
+          </div>
+
+          <!-- Timeline Post Creation / Edit Form -->
+          <div class="p-5 sm:p-6 rounded-2xl bg-[#10101a] border border-[#d4af37]/35 space-y-5">
+            <div class="flex items-center justify-between border-b border-[#d4af37]/20 pb-3">
+              <span id="timelineFormModeBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-[#d4af37]/20 text-[#f0d78c] border border-[#d4af37]/40">
+                ＋ 新規世界観Xポスト 投稿モード
+              </span>
+            </div>
+
+            <!-- Row 1: 投稿する名前（キャスト一覧から選択） & 日時 -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <label class="block text-xs text-[#f0d78c] font-semibold sm:col-span-2">
+                投稿する名前（キャスト一覧から選択）
+                <select id="tlAuthorSelect" class="mt-1.5 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/40 text-sm text-[#f5efe2] font-normal focus:outline-none focus:border-[#d4af37]">
+                  <option value="OFFICIAL">魔法少女と悪のノクターンサロン Rivellia（公式）</option>
+                </select>
+                <span class="block text-[11px] text-[#9c9480] font-normal mt-1">※「1. キャスト編集・新規登録」で登録したキャストが自動的にここへ追加されます。選択したキャストのアイコン画像・陣営バッジが自動で表示されます。</span>
+              </label>
+
+              <label class="block text-xs text-[#f0d78c] font-semibold">
+                投稿日時
+                <input id="tlDateInput" type="text" placeholder="例：2026.10.25 22:00" class="mt-1.5 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/40 text-sm text-[#f5efe2] font-normal focus:outline-none focus:border-[#d4af37]">
+              </label>
+            </div>
+
+            <!-- Row 2: ポスト本文 -->
+            <label class="block text-xs text-[#f0d78c] font-semibold">
+              ポスト本文 <span class="text-[#9c9480] font-normal">— #リベリア_VRC は自動でX検索リンクになります</span>
+              <textarea id="tlBodyInput" rows="4" placeholder="リベリアの世界観でのキャストのつぶやきや写真を投稿..." class="mt-1.5 w-full px-4 py-3 rounded-xl bg-[#0c0c14] border border-[#d4af37]/40 text-sm text-[#f5efe2] font-normal leading-relaxed focus:outline-none focus:border-[#d4af37]"></textarea>
+            </label>
+
+            <!-- Row 3: 添付画像（複数選択可） -->
+            <div class="p-4 rounded-2xl bg-[#0b0b14] border border-[#d4af37]/30 space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <span class="text-xs font-bold text-[#f0d78c]">🖼 ポスト画像（複数枚登録可能）</span>
+                  <p class="text-[11px] text-[#9c9480] mt-0.5">Xの投稿のように1〜4枚の写真を添付できます（クリックで拡大表示）。</p>
+                </div>
+                <button id="clearTlDraftImagesBtn" type="button" class="hidden px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-400/35 text-xs transition">
+                  ✕ 画像をすべてクリア
+                </button>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 items-end">
+                <label class="block text-xs text-[#ece6d9]">
+                  <span class="block mb-1 text-[#b5ae9e]">パソコン・スマホから画像を選択（複数選択可）</span>
+                  <input id="tlImageFilesInput" type="file" accept="image/*" multiple class="w-full text-xs text-[#c7bfa8] file:mr-3 file:py-2 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#d4af37] file:text-[#09090d] hover:file:brightness-110 cursor-pointer">
+                </label>
+                <div class="flex items-center gap-2">
+                  <label class="block text-xs text-[#b5ae9e] flex-1">
+                    または画像URLを追加（任意）
+                    <input id="tlImageUrlInput" type="text" placeholder="https://..." class="mt-1 w-full px-3 py-2 rounded-xl bg-[#141420] border border-[#d4af37]/30 text-xs text-[#f5efe2]">
+                  </label>
+                  <button id="addTlImageUrlBtn" type="button" class="px-3 py-2 rounded-xl bg-[#181828] hover:bg-[#25253c] text-xs font-semibold text-[#f0d78c] border border-[#d4af37]/35 shrink-0">
+                    ＋追加
+                  </button>
+                </div>
+              </div>
+
+              <div id="tlComposerImagesPreview" class="hidden pt-2 grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+              <div class="flex flex-wrap items-center gap-3">
+                <button id="submitTimelinePostBtn" type="button" class="px-6 py-3 rounded-xl bg-gradient-to-r from-[#b89028] via-[#d4af37] to-[#b89028] text-[#09090d] font-bold text-xs sm:text-sm hover:brightness-110 transition shadow-lg">
+                  <span id="saveTimelinePostBtnLabel">✓ タイムラインに投稿する</span>
+                </button>
+                <button id="deleteSelectedTimelinePostBtn" type="button" class="hidden px-4 py-3 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-400/40 text-xs font-semibold text-rose-200 transition">
+                  このポストを削除
+                </button>
+                <span id="tlPostFeedback" class="text-xs text-emerald-300 font-medium"></span>
+              </div>
+            </div>
+
+            <!-- Official X Announcement & Direct Post Link Box -->
+            <div id="adminTimelineShareBox" class="hidden p-5 rounded-2xl bg-[#091318] border border-emerald-400/40 space-y-3">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-emerald-300">🔗 投稿した世界観Xポストの専用リンク ＆ 公式Xお知らせ作成</span>
+                <span id="adminTimelineShareStatus" class="text-xs text-[#f0d78c]"></span>
+              </div>
+              <p class="text-[11px] text-[#c7bfa8]">
+                このリンクを公式X（旧Twitter）に貼ってお知らせすると、リンクを開いた人がサイト内のこの投稿へ直接ジャンプできます（※GitHubへHTML反映後に全閲覧者へ有効になります）。
+              </p>
+              <div class="flex flex-col sm:flex-row gap-2">
+                <input id="adminTimelineDirectLinkInput" type="text" readonly class="flex-1 px-3.5 py-2 rounded-xl bg-[#06060a] border border-[#d4af37]/35 text-xs text-[#f0d78c] font-mono">
+                <button id="copyAdminTimelineLinkBtn" type="button" class="px-4 py-2 rounded-xl bg-[#161626] hover:bg-[#222238] border border-[#d4af37]/45 text-xs font-bold text-[#f0d78c] whitespace-nowrap">
+                  🔗 投稿のリンクをコピー
+                </button>
+              </div>
+              <div class="flex flex-wrap items-center gap-2.5 pt-1">
+                <a id="postAdminTimelineToXBtn" href="https://x.com/intent/tweet" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#d4af37] hover:brightness-110 text-[#09090d] font-bold text-xs transition">
+                  <span>𝕏 公式Xで「世界観ポストを投稿しました」とお知らせする ↗</span>
+                </a>
+                <button id="copyAdminTimelineAnnounceTextBtn" type="button" class="px-4 py-2.5 rounded-xl bg-[#141422] hover:bg-[#1f1f32] text-[#ece6d9] border border-[#d4af37]/35 text-xs font-medium transition">
+                  📋 お知らせ文＋リンクをコピー
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4 (tab-factions): Faction Editor -->
         <div id="tab-factions" class="admin-tab-panel hidden space-y-5">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="p-4 rounded-xl bg-[#0b0b12] border border-[#d4af37]/30 space-y-3">
@@ -1302,8 +1413,10 @@
       editingCastImageData: "",
       editingReportId: "NEW",
       editingReportImages: [],
+      editingTimelinePostId: "NEW",
       selectedReportCast: "ALL",
       highlightedReportId: null,
+      highlightedTimelinePostId: null,
       isAdminAuthenticated: false,
       pendingAdminTab: "tab-add-cast",
       adminPasscode: "gackt0116"
@@ -1381,6 +1494,25 @@
 
     function buildReportXIntentUrl(report) {
       const text = buildReportAnnounceText(report);
+      return `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`;
+    }
+
+    function getTimelinePostShareUrl(postId) {
+      const base = window.location.href.split("#")[0].split("?")[0];
+      return `${base}?post=${encodeURIComponent(postId)}#post-${encodeURIComponent(postId)}`;
+    }
+
+    function buildTimelinePostAnnounceText(post) {
+      const url = getTimelinePostShareUrl(post.id);
+      const authorLabel = post.authorName || "魔法少女と悪のノクターンサロン Rivellia";
+      const rawBody = (post.body || "").replace(/#リベリア_VRC/g, "").trim();
+      const snippet = rawBody.length > 70 ? rawBody.slice(0, 70) + "…" : rawBody;
+      const bodyPart = snippet ? `\n「${snippet}」\n` : "\n";
+      return `【リベリア 世界観X投稿のお知らせ】\n投稿キャスト：${authorLabel}${bodyPart}\n公式サイトのタイムラインにて新しい投稿が公開されました。\n${url}\n#リベリア_VRC`;
+    }
+
+    function buildTimelinePostXIntentUrl(post) {
+      const text = buildTimelinePostAnnounceText(post);
       return `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`;
     }
 
@@ -2355,29 +2487,43 @@
 
     function formatHashtagsInline(text) {
       const escaped = escapeHtml(text || "");
-      return escaped.replace(/(#[\w\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF_]+)/g, '<span class="text-[#f0d78c] font-semibold">$1</span>');
+      return escaped.replace(/(#[\w\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF_]+)/g, (match) => {
+        const searchUrl = "https://x.com/search?q=" + encodeURIComponent(match);
+        return `<a href="${searchUrl}" target="_blank" rel="noopener noreferrer" class="text-[#38bdf8] hover:text-[#f0d78c] hover:underline font-semibold whitespace-nowrap transition" title="X（旧Twitter）で ${match} を検索">${match}</a>`;
+      });
     }
 
     function populateTimelineAuthorSelect() {
       const sel = document.getElementById("tlAuthorSelect");
       if (!sel) return;
-      const current = sel.value || "OFFICIAL";
-      sel.innerHTML = `<option value="OFFICIAL">魔法少女と悪のノクターンサロン Rivellia（公式）</option>` +
-        state.casts.map(c => `<option value="CAST:${escapeHtml(c.id)}">${escapeHtml(c.name)}（演者：${escapeHtml(c.actor)}）</option>`).join("");
-      if (Array.from(sel.options).some(o => o.value === current)) {
+      const current = sel.value;
+      const castOptions = state.casts.map(c => {
+        const fName = state.config.factions[c.factionId]?.name || c.categoryName || "中立";
+        return `<option value="CAST:${escapeHtml(c.id)}">${escapeHtml(c.name)}（${escapeHtml(fName)}／演者：${escapeHtml(c.actor)}）</option>`;
+      }).join("");
+      const officialOption = `<option value="OFFICIAL">魔法少女と悪のノクターンサロン Rivellia（サロン公式）</option>`;
+      sel.innerHTML = castOptions ? (castOptions + officialOption) : officialOption;
+      if (current && Array.from(sel.options).some(o => o.value === current)) {
         sel.value = current;
+      } else if (state.casts.length > 0) {
+        sel.value = "CAST:" + state.casts[0].id;
+      } else {
+        sel.value = "OFFICIAL";
       }
     }
 
     function updateTlComposerImagesPreview() {
       const wrap = document.getElementById("tlComposerImagesPreview");
+      const clearBtn = document.getElementById("clearTlDraftImagesBtn");
       if (!wrap) return;
       if (!state.tlDraftImages || state.tlDraftImages.length === 0) {
         wrap.innerHTML = "";
         wrap.classList.add("hidden");
+        if (clearBtn) clearBtn.classList.add("hidden");
         return;
       }
       wrap.classList.remove("hidden");
+      if (clearBtn) clearBtn.classList.remove("hidden");
       wrap.innerHTML = state.tlDraftImages.map((src, idx) => `
         <div class="relative rounded-xl overflow-hidden border border-[#d4af37]/40 bg-[#07070c]">
           <img src="${escapeHtml(src)}" alt="添付画像 ${idx + 1}" class="w-full h-24 object-cover">
@@ -2440,25 +2586,26 @@
       });
 
       if (filtered.length === 0) {
+        const adminBtnHtml = state.isAdminAuthenticated
+          ? `<div class="pt-2">
+               <button id="emptyTimelineOpenComposerBtn" type="button" class="px-5 py-2.5 rounded-xl bg-[#d4af37] text-[#09090d] font-bold text-xs hover:brightness-110 transition">
+                 ＋ 管理画面で最初の世界観ポストを投稿する
+               </button>
+             </div>`
+          : "";
         container.innerHTML = `
-          <div class="card-nocturne rounded-3xl p-10 text-center space-y-4">
-            <p class="font-serif-jp text-base sm:text-lg text-[#f0d78c]">まだタイムラインの投稿はありません</p>
-            <p class="text-xs text-[#9c9480]">右上の「＋ ポストを投稿」または「営業記録の投稿」から、この場所にタイムラインが表示されます。</p>
-            <div>
-              <button id="emptyTimelineOpenComposerBtn" type="button" class="px-5 py-2.5 rounded-xl bg-[#d4af37] text-[#09090d] font-bold text-xs hover:brightness-110 transition">
-                ＋ 最初のポストを投稿する
-              </button>
-            </div>
+          <div class="card-nocturne rounded-3xl p-10 text-center space-y-3">
+            <p class="font-serif-jp text-base sm:text-lg text-[#f0d78c]">現在タイムラインの投稿はありません</p>
+            <p class="text-xs text-[#9c9480]">リベリアの世界観でのキャストたちのX投稿や営業記録がここに表示されます。</p>
+            ${adminBtnHtml}
           </div>
         `;
         const openBtn = document.getElementById("emptyTimelineOpenComposerBtn");
         if (openBtn) {
           openBtn.addEventListener("click", () => {
-            const card = document.getElementById("inlineTimelineComposerCard");
-            if (card) {
-              card.classList.remove("hidden");
-              document.getElementById("tlBodyInput")?.focus();
-            }
+            state.editingTimelinePostId = "NEW";
+            openAdminModal("tab-add-timeline");
+            loadTimelinePostIntoEditor("NEW");
           });
         }
         return;
@@ -2469,21 +2616,27 @@
           ? state.casts.find(c => c.id === item.authorCastId)
           : state.casts.find(c => c.name === item.authorName);
 
+        const displayAuthorName = matchedCast ? matchedCast.name : item.authorName;
         const avatarSrc = (matchedCast && matchedCast.image) ? matchedCast.image : LOGO_DATA_URI;
         const f = matchedCast ? state.config.factions[matchedCast.factionId] : null;
         const badgeHtml = f
           ? `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold border" style="color:${escapeHtml(f.color)}; background:${escapeHtml(f.badgeBg)}; border-color:${escapeHtml(f.badgeBorder)};">${escapeHtml(f.name)}</span>`
           : `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#d4af37]/15 text-[#f0d78c] border border-[#d4af37]/35">${escapeHtml(item.badgeText)}</span>`;
 
+        const handleSubText = matchedCast
+          ? `@Rivellia_No${String(matchedCast.no).padStart(2, "0")}`
+          : `@Rivellia_Official`;
+
         const authorClickAttr = matchedCast ? `data-open-cast="${escapeHtml(matchedCast.id)}"` : "";
         const authorCursor = matchedCast ? "cursor-pointer hover:text-[#f0d78c]" : "";
+        const isHighlighted = (item.itemType === "POST" && state.highlightedTimelinePostId === item.id);
 
         const imagesList = item.images || [];
         let imagesHtml = "";
         if (imagesList.length === 1) {
           imagesHtml = `
             <div class="pt-2">
-              <img src="${escapeHtml(imagesList[0])}" alt="${escapeHtml(item.authorName)}" data-lightbox-src="${escapeHtml(imagesList[0])}" data-lightbox-title="${escapeHtml(item.title || item.authorName)}"
+              <img src="${escapeHtml(imagesList[0])}" alt="${escapeHtml(displayAuthorName)}" data-lightbox-src="${escapeHtml(imagesList[0])}" data-lightbox-title="${escapeHtml(item.title || displayAuthorName)}"
                    class="tl-photo-thumb max-h-[420px] w-auto max-w-full rounded-2xl border border-[#d4af37]/30 object-contain cursor-pointer hover:brightness-105 transition">
             </div>
           `;
@@ -2492,7 +2645,7 @@
             <div class="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
               ${imagesList.map((src, i) => `
                 <div class="rounded-2xl overflow-hidden border border-[#d4af37]/30 bg-[#07070c]">
-                  <img src="${escapeHtml(src)}" alt="${escapeHtml(item.authorName)} (${i + 1})" data-lightbox-src="${escapeHtml(src)}" data-lightbox-title="${escapeHtml(item.title || item.authorName)}"
+                  <img src="${escapeHtml(src)}" alt="${escapeHtml(displayAuthorName)} (${i + 1})" data-lightbox-src="${escapeHtml(src)}" data-lightbox-title="${escapeHtml(item.title || displayAuthorName)}"
                        class="tl-photo-thumb w-full h-56 object-cover cursor-pointer hover:scale-[1.01] transition">
                 </div>
               `).join("")}
@@ -2516,47 +2669,55 @@
           ? `<div class="font-serif-jp text-base sm:text-lg font-bold text-[#f7f2e6]">【営業記録】${escapeHtml(item.title)}</div>`
           : "";
 
-        const reportJumpBtnHtml = (item.itemType === "REPORT" && item.reportId)
-          ? `<div class="pt-2 flex flex-wrap items-center gap-2">
+        const postFooterActionsHtml = (item.itemType === "POST")
+          ? `<div class="pt-3 border-t border-[#d4af37]/15 flex flex-wrap items-center justify-between gap-2">
+               <div class="flex flex-wrap items-center gap-2">
+                 <button type="button" data-copy-tl-link="${escapeHtml(item.id)}" class="copy-tl-link-btn px-3 py-1.5 rounded-xl bg-[#141422] hover:bg-[#222236] border border-[#d4af37]/35 text-xs text-[#f0d78c] transition inline-flex items-center gap-1.5">
+                   <span>🔗</span>
+                   <span class="copy-tl-link-label">この投稿のリンクをコピー</span>
+                 </button>
+                 <a href="${escapeHtml(buildTimelinePostXIntentUrl(item))}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-xl bg-[#141422] hover:bg-[#d4af37] text-[#f0d78c] hover:text-[#09090d] border border-[#d4af37]/40 text-xs font-semibold transition inline-flex items-center gap-1.5">
+                   <span>𝕏</span>
+                   <span>公式Xで投稿のお知らせ</span>
+                 </a>
+               </div>
+               ${state.isAdminAuthenticated ? `
+                 <div class="flex items-center gap-1.5">
+                   <button type="button" data-edit-tl-post="${escapeHtml(item.id)}" class="tl-edit-post-btn px-3 py-1 rounded-lg bg-[#d4af37] text-[#09090d] font-bold text-xs hover:brightness-110 transition">✎ 編集</button>
+                   <button type="button" data-del-tl-post="${escapeHtml(item.id)}" class="tl-del-post-btn px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/35 text-rose-200 border border-rose-400/35 text-xs transition">削除</button>
+                 </div>
+               ` : ""}
+             </div>`
+          : `<div class="pt-2 flex flex-wrap items-center gap-2">
                <button type="button" data-jump-report="${escapeHtml(item.reportId)}" class="tl-jump-report-btn px-3.5 py-1.5 rounded-xl bg-[#161624] hover:bg-[#d4af37] text-[#f0d78c] hover:text-[#09090d] border border-[#d4af37]/35 text-xs font-semibold transition">
                  📖 サイト内の営業記録へ移動
                </button>
-             </div>`
-          : "";
-
-        const statusId = extractXStatusId(item.xPostUrl);
-        const xEmbedContainerHtml = statusId
-          ? `<div id="tl-x-embed-${escapeHtml(item.id)}" data-x-status-id="${escapeHtml(statusId)}" class="tl-x-embed-slot pt-2 overflow-hidden"></div>`
-          : "";
-
-        const deleteBtnHtml = (item.itemType === "POST")
-          ? `<button type="button" data-del-tl-post="${escapeHtml(item.id)}" class="tl-del-post-btn text-xs text-[#787163] hover:text-rose-300 px-2 py-1 transition" title="このポストを削除">削除</button>`
-          : "";
+             </div>`;
 
         const bodyWithTag = item.body.includes("#リベリア_VRC")
           ? item.body
-          : `${item.body}
-#リベリア_VRC`;
+          : `${item.body}\n#リベリア_VRC`;
+
+        const articleId = item.itemType === "POST" ? `post-${escapeHtml(item.id)}` : `tl-item-${escapeHtml(item.id)}`;
 
         return `
-          <article class="card-nocturne rounded-3xl p-6 sm:p-7 border border-[#d4af37]/30 space-y-4">
+          <article id="${articleId}" class="card-nocturne rounded-3xl p-6 sm:p-7 border border-[#d4af37]/30 space-y-4 ${isHighlighted ? "report-highlight-ring" : ""}">
             <div class="flex items-start justify-between gap-3">
               <div class="flex items-center gap-3">
-                <img src="${escapeHtml(avatarSrc)}" alt="${escapeHtml(item.authorName)}" ${authorClickAttr}
-                     class="tl-author-trigger w-11 h-11 rounded-full object-cover border border-[#d4af37]/45 bg-[#07070c] shrink-0 ${matchedCast ? "cursor-pointer" : ""}">
+                <img src="${escapeHtml(avatarSrc)}" alt="${escapeHtml(displayAuthorName)}" ${authorClickAttr}
+                     class="tl-author-trigger w-12 h-12 rounded-full object-cover border border-[#d4af37]/45 bg-[#07070c] shrink-0 ${matchedCast ? "cursor-pointer" : ""}">
                 <div>
                   <div class="flex flex-wrap items-center gap-2">
                     <span ${authorClickAttr} class="tl-author-trigger font-serif-jp font-bold text-sm sm:text-base text-[#f7f2e6] ${authorCursor}">
-                      ${escapeHtml(item.authorName)}
+                      ${escapeHtml(displayAuthorName)}
                     </span>
                     ${badgeHtml}
+                    <span class="text-xs text-[#787163]">${escapeHtml(handleSubText)}</span>
+                    <span class="text-xs text-[#9c9480]">・${escapeHtml(item.date)}</span>
                   </div>
-                  <time class="block text-xs text-[#9c9480] mt-0.5">${escapeHtml(item.date)}</time>
                 </div>
               </div>
-              <div class="flex items-center gap-2">
-                ${deleteBtnHtml}
-              </div>
+              <div class="text-[#d4af37]/60 text-sm select-none" title="Rivellia In-World Post">𝕏</div>
             </div>
 
             ${reportTitleHtml}
@@ -2566,8 +2727,7 @@
 
             <div class="pl-0 sm:pl-14 space-y-3">
               ${imagesHtml}
-              ${xEmbedContainerHtml}
-              ${reportJumpBtnHtml}
+              ${postFooterActionsHtml}
             </div>
           </article>
         `;
@@ -2596,28 +2756,42 @@
         });
       });
 
+      container.querySelectorAll(".copy-tl-link-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const postId = btn.getAttribute("data-copy-tl-link");
+          const url = getTimelinePostShareUrl(postId);
+          copyTextToClipboard(url, () => {
+            const lbl = btn.querySelector(".copy-tl-link-label");
+            if (lbl) {
+              lbl.textContent = "✓ 投稿リンクをコピーしました！";
+              setTimeout(() => {
+                lbl.textContent = "この投稿のリンクをコピー";
+              }, 2400);
+            }
+          });
+        });
+      });
+
+      container.querySelectorAll(".tl-edit-post-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const postId = btn.getAttribute("data-edit-tl-post");
+          openTimelineEditorFor(postId);
+        });
+      });
+
       container.querySelectorAll(".tl-del-post-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           const postId = btn.getAttribute("data-del-tl-post");
           const idx = state.timeline.findIndex(p => p.id === postId);
           if (idx !== -1) {
             state.timeline.splice(idx, 1);
+            if (state.editingTimelinePostId === postId) state.editingTimelinePostId = "NEW";
             saveStateToStorage();
             renderTimeline();
+            updateAdminPreviews();
           }
         });
       });
-
-      // Render embedded X tweets inside the site if any status IDs are present and widgets.js is available
-      if (window.twttr && window.twttr.widgets) {
-        container.querySelectorAll(".tl-x-embed-slot").forEach(slot => {
-          const stId = slot.getAttribute("data-x-status-id");
-          if (stId && !slot.hasAttribute("data-rendered")) {
-            slot.setAttribute("data-rendered", "1");
-            window.twttr.widgets.createTweet(stId, slot, { theme: "dark", lang: "ja" });
-          }
-        });
-      }
     }
 
     // ---------------------------------------------------------
@@ -2742,6 +2916,8 @@
           renderCasts();
           renderActorCrossTable();
           renderReportCastCheckboxes(getCheckedReportCastNames());
+            populateTimelineAuthorSelect();
+            renderTimeline();
           updateAdminPreviews();
           loadCastIntoEditor(state.editingCastId);
           showGlobalAdminFeedback(`✓ キャスト「${removedName}」を削除しました。`);
@@ -2956,11 +3132,163 @@
       loadReportIntoEditor(reportId);
     }
 
+    function updateAdminTimelineShareBox(post) {
+      const box = document.getElementById("adminTimelineShareBox");
+      const linkInput = document.getElementById("adminTimelineDirectLinkInput");
+      const xBtn = document.getElementById("postAdminTimelineToXBtn");
+      if (!box) return;
+      if (!post) {
+        box.classList.add("hidden");
+        return;
+      }
+      box.classList.remove("hidden");
+      const shareUrl = getTimelinePostShareUrl(post.id);
+      if (linkInput) linkInput.value = shareUrl;
+      if (xBtn) xBtn.href = buildTimelinePostXIntentUrl(post);
+    }
+
+    function renderAdminRegisteredTimelineList() {
+      const listEl = document.getElementById("adminRegisteredTimelineList");
+      if (!listEl) return;
+      if (!state.timeline || state.timeline.length === 0) {
+        listEl.innerHTML = `<div class="text-xs text-[#787163] py-2">まだ投稿されている世界観Xポストはありません。下のフォームからキャストを選択して投稿できます。</div>`;
+        return;
+      }
+      listEl.innerHTML = state.timeline.map(p => {
+        const isEditing = state.editingTimelinePostId === p.id;
+        const imgCount = Array.isArray(p.images) ? p.images.length : 0;
+        const snippet = (p.body || "").replace(/\s+/g, " ").slice(0, 32);
+        return `
+          <div class="flex items-center justify-between gap-2 px-3.5 py-2 rounded-xl border ${isEditing ? "bg-[#d4af37]/20 border-[#d4af37]" : "bg-[#141422] border-[#d4af37]/25"}">
+            <div class="text-xs truncate">
+              <span class="font-display text-[#f0d78c] font-bold mr-2">${escapeHtml(p.date)}</span>
+              <strong class="text-[#f7f2e6] font-serif-jp">${escapeHtml(p.authorName)}</strong>
+              <span class="text-[#9c9480] ml-2">「${escapeHtml(snippet)}」（画像：${imgCount}枚）</span>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button type="button" data-admin-pick-tl="${escapeHtml(p.id)}" class="admin-pick-tl-btn px-3 py-1 rounded-lg bg-[#d4af37] text-[#09090d] font-bold text-xs hover:brightness-110 transition">
+                ✎ 編集・リンク
+              </button>
+              <button type="button" data-admin-del-tl="${escapeHtml(p.id)}" class="admin-del-tl-btn px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/35 text-rose-200 border border-rose-400/35 text-xs transition">
+                削除
+              </button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      listEl.querySelectorAll(".admin-pick-tl-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          loadTimelinePostIntoEditor(btn.getAttribute("data-admin-pick-tl"));
+        });
+      });
+
+      listEl.querySelectorAll(".admin-del-tl-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const targetId = btn.getAttribute("data-admin-del-tl");
+          const idx = state.timeline.findIndex(p => p.id === targetId);
+          if (idx === -1) return;
+          const removedAuthor = state.timeline[idx].authorName;
+          state.timeline.splice(idx, 1);
+          if (state.editingTimelinePostId === targetId) state.editingTimelinePostId = "NEW";
+          saveStateToStorage();
+          renderTimeline();
+          updateAdminPreviews();
+          loadTimelinePostIntoEditor(state.editingTimelinePostId);
+          showGlobalAdminFeedback(`✓「${removedAuthor}」のタイムライン投稿を削除しました。`);
+        });
+      });
+    }
+
+    function populateAdminTimelineSelector() {
+      const sel = document.getElementById("adminTimelineEditSelector");
+      if (!sel) return;
+      const current = state.editingTimelinePostId || "NEW";
+      sel.innerHTML = `<option value="NEW">＋ 新しい世界観Xポストを投稿する</option>` +
+        (state.timeline || []).map(p => {
+          const snip = (p.body || "").replace(/\s+/g, " ").slice(0, 22);
+          return `<option value="${escapeHtml(p.id)}">${escapeHtml(p.date)}｜${escapeHtml(p.authorName)}：「${escapeHtml(snip)}」</option>`;
+        }).join("");
+      sel.value = (current === "NEW" || state.timeline.some(p => p.id === current)) ? current : "NEW";
+      renderAdminRegisteredTimelineList();
+    }
+
+    function loadTimelinePostIntoEditor(postId) {
+      state.editingTimelinePostId = postId || "NEW";
+      populateTimelineAuthorSelect();
+      populateAdminTimelineSelector();
+      const saveLabel = document.getElementById("saveTimelinePostBtnLabel");
+      const delBtn = document.getElementById("deleteSelectedTimelinePostBtn");
+      const modeBadge = document.getElementById("timelineFormModeBadge");
+      const filesInput = document.getElementById("tlImageFilesInput");
+      const urlInput = document.getElementById("tlImageUrlInput");
+      if (filesInput) filesInput.value = "";
+      if (urlInput) urlInput.value = "";
+
+      if (state.editingTimelinePostId === "NEW") {
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, "0");
+        const dd = String(now.getDate()).padStart(2, "0");
+        const hh = String(now.getHours()).padStart(2, "0");
+        const mi = String(now.getMinutes()).padStart(2, "0");
+        const dateEl = document.getElementById("tlDateInput");
+        if (dateEl) dateEl.value = `${yyyy}.${mm}.${dd} ${hh}:${mi}`;
+        const bodyEl = document.getElementById("tlBodyInput");
+        if (bodyEl) bodyEl.value = "";
+        state.tlDraftImages = [];
+        updateTlComposerImagesPreview();
+        updateAdminTimelineShareBox(null);
+        if (saveLabel) saveLabel.textContent = "✓ タイムラインに投稿する";
+        if (modeBadge) {
+          modeBadge.textContent = "＋ 新規世界観Xポスト 投稿モード";
+          modeBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-[#d4af37]/20 text-[#f0d78c] border border-[#d4af37]/40";
+        }
+        if (delBtn) delBtn.classList.add("hidden");
+        return;
+      }
+
+      const p = state.timeline.find(item => item.id === state.editingTimelinePostId);
+      if (!p) return;
+      const authorSel = document.getElementById("tlAuthorSelect");
+      if (authorSel) {
+        const targetVal = p.authorCastId ? `CAST:${p.authorCastId}` : "OFFICIAL";
+        if (Array.from(authorSel.options).some(o => o.value === targetVal)) {
+          authorSel.value = targetVal;
+        }
+      }
+      const dateEl = document.getElementById("tlDateInput");
+      if (dateEl) dateEl.value = p.date || "";
+      const bodyEl = document.getElementById("tlBodyInput");
+      if (bodyEl) bodyEl.value = p.body || "";
+      state.tlDraftImages = Array.isArray(p.images) ? [...p.images] : [];
+      updateTlComposerImagesPreview();
+      updateAdminTimelineShareBox(p);
+      if (saveLabel) saveLabel.textContent = `✓「${p.authorName}」の投稿を修正して保存する`;
+      if (modeBadge) {
+        modeBadge.textContent = `✎ 編集中：${p.date}（${p.authorName}）`;
+        modeBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-200 border border-emerald-400/40";
+      }
+      if (delBtn) delBtn.classList.remove("hidden");
+    }
+
+    function openTimelineEditorFor(postId) {
+      if (!state.isAdminAuthenticated) {
+        state.editingTimelinePostId = postId;
+        openAdminLoginModal("tab-add-timeline");
+        return;
+      }
+      openAdminModal("tab-add-timeline");
+      loadTimelinePostIntoEditor(postId);
+    }
+
     function updateAdminPreviews() {
       document.getElementById("configJsonPreview").textContent = JSON.stringify(state.config, null, 2);
       document.getElementById("castsJsonPreview").textContent = JSON.stringify(state.casts, null, 2);
       populateAdminCastSelector();
       populateAdminReportSelector();
+      populateTimelineAuthorSelect();
+      populateAdminTimelineSelector();
 
       const sampleReport = state.reports[0] || { id: "report", date: "2026.10.25", title: "営業記録", casts: [], body: [] };
       const mdText = [
@@ -3026,6 +3354,8 @@
           loadCastIntoEditor(state.editingCastId || "NEW");
         } else if (state.pendingAdminTab === "tab-add-report") {
           loadReportIntoEditor(state.editingReportId || "NEW");
+        } else if (state.pendingAdminTab === "tab-add-timeline") {
+          loadTimelinePostIntoEditor(state.editingTimelinePostId || "NEW");
         }
       } else {
         if (err) err.classList.remove("hidden");
@@ -3045,6 +3375,8 @@
       }
       updateAdminPreviews();
       renderReportCastCheckboxes(getCheckedReportCastNames());
+            populateTimelineAuthorSelect();
+            renderTimeline();
       document.getElementById("adminDataModal").classList.remove("hidden");
       if (defaultTabId) switchAdminTab(defaultTabId);
     }
@@ -3066,6 +3398,9 @@
       if (tabId === "tab-add-report") {
         const currentReport = state.reports.find(r => r.id === state.editingReportId);
         renderReportCastCheckboxes(currentReport ? currentReport.casts : getCheckedReportCastNames());
+      } else if (tabId === "tab-add-timeline") {
+        populateTimelineAuthorSelect();
+        populateAdminTimelineSelector();
       }
     }
 
@@ -3076,17 +3411,32 @@
         if (!targetReportId && window.location.hash.startsWith("#report-")) {
           targetReportId = decodeURIComponent(window.location.hash.replace(/^#report-/, ""));
         }
-        if (!targetReportId) return;
-        const exists = state.reports.some(r => r.id === targetReportId);
-        if (!exists) return;
-        state.selectedReportCast = "ALL";
-        state.highlightedReportId = targetReportId;
-        navigateToPageRoute("archive");
-        renderReports();
-        setTimeout(() => {
-          const el = document.getElementById("report-" + targetReportId);
-          if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-        }, 120);
+        if (targetReportId && state.reports.some(r => r.id === targetReportId)) {
+          state.selectedReportCast = "ALL";
+          state.highlightedReportId = targetReportId;
+          navigateToPageRoute("archive");
+          renderReports();
+          setTimeout(() => {
+            const el = document.getElementById("report-" + targetReportId);
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+          }, 120);
+          return;
+        }
+
+        let targetPostId = params.get("post");
+        if (!targetPostId && window.location.hash.startsWith("#post-")) {
+          targetPostId = decodeURIComponent(window.location.hash.replace(/^#post-/, ""));
+        }
+        if (targetPostId && state.timeline.some(p => p.id === targetPostId)) {
+          state.timelineFilter = "ALL";
+          state.highlightedTimelinePostId = targetPostId;
+          navigateToPageRoute("x_feed");
+          renderTimeline();
+          setTimeout(() => {
+            const el = document.getElementById("post-" + targetPostId);
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+          }, 120);
+        }
       } catch (e) {}
     }
 
@@ -3249,18 +3599,16 @@
       setDefaultTlDate();
 
       document.getElementById("toggleInlineTimelineComposerBtn").addEventListener("click", () => {
-        const card = document.getElementById("inlineTimelineComposerCard");
-        if (!card) return;
-        setDefaultTlDate();
-        populateTimelineAuthorSelect();
-        card.classList.toggle("hidden");
-        if (!card.classList.contains("hidden")) {
-          document.getElementById("tlBodyInput")?.focus();
-        }
+        state.editingTimelinePostId = "NEW";
+        openAdminModal("tab-add-timeline");
+        loadTimelinePostIntoEditor("NEW");
       });
 
-      document.getElementById("closeInlineTimelineComposerBtn").addEventListener("click", () => {
-        document.getElementById("inlineTimelineComposerCard")?.classList.add("hidden");
+      document.getElementById("adminTimelineEditSelector").addEventListener("change", (e) => {
+        loadTimelinePostIntoEditor(e.target.value);
+      });
+      document.getElementById("switchToNewTimelinePostModeBtn").addEventListener("click", () => {
+        loadTimelinePostIntoEditor("NEW");
       });
 
       document.getElementById("tlImageFilesInput").addEventListener("change", (e) => {
@@ -3276,34 +3624,70 @@
         e.target.value = "";
       });
 
+      document.getElementById("addTlImageUrlBtn").addEventListener("click", () => {
+        const urlInput = document.getElementById("tlImageUrlInput");
+        const val = (urlInput ? urlInput.value : "").trim();
+        if (!val) return;
+        state.tlDraftImages.push(val);
+        urlInput.value = "";
+        updateTlComposerImagesPreview();
+      });
+
+      document.getElementById("clearTlDraftImagesBtn").addEventListener("click", () => {
+        state.tlDraftImages = [];
+        const filesInput = document.getElementById("tlImageFilesInput");
+        const urlInput = document.getElementById("tlImageUrlInput");
+        if (filesInput) filesInput.value = "";
+        if (urlInput) urlInput.value = "";
+        updateTlComposerImagesPreview();
+      });
+
       document.getElementById("submitTimelinePostBtn").addEventListener("click", () => {
         const bodyVal = document.getElementById("tlBodyInput").value.trim();
-        const xPostUrl = document.getElementById("tlXPostUrlInput").value.trim();
-        if (!bodyVal && state.tlDraftImages.length === 0 && !xPostUrl) {
+        if (!bodyVal && state.tlDraftImages.length === 0) {
           const fb = document.getElementById("tlPostFeedback");
           if (fb) fb.textContent = "※本文または画像を入力してください";
           return;
         }
         const selVal = document.getElementById("tlAuthorSelect").value;
-        const customAuthor = document.getElementById("tlCustomAuthorInput").value.trim();
         let authorName = "魔法少女と悪のノクターンサロン Rivellia";
         let authorCastId = "";
         let badgeText = "Official";
 
-        if (customAuthor) {
-          authorName = customAuthor;
-          badgeText = "Salon";
-        } else if (selVal && selVal.startsWith("CAST:")) {
+        if (selVal && selVal.startsWith("CAST:")) {
           const cid = selVal.replace(/^CAST:/, "");
           const cObj = state.casts.find(c => c.id === cid);
           if (cObj) {
             authorName = cObj.name;
             authorCastId = cObj.id;
-            badgeText = cObj.categoryName || "Cast";
+            badgeText = state.config.factions[cObj.factionId]?.name || cObj.categoryName || "Cast";
           }
         }
 
         const dateVal = document.getElementById("tlDateInput").value.trim() || "2026.10.25";
+        const imagesList = Array.isArray(state.tlDraftImages) ? [...state.tlDraftImages] : [];
+
+        if (state.editingTimelinePostId && state.editingTimelinePostId !== "NEW") {
+          const target = state.timeline.find(p => p.id === state.editingTimelinePostId);
+          if (target) {
+            target.date = dateVal;
+            target.authorName = authorName;
+            target.authorCastId = authorCastId;
+            target.badgeText = badgeText;
+            target.body = bodyVal || "#リベリア_VRC";
+            target.images = imagesList;
+            saveStateToStorage();
+            renderTimeline();
+            updateAdminPreviews();
+            updateAdminTimelineShareBox(target);
+            const fb = document.getElementById("tlPostFeedback");
+            if (fb) fb.textContent = `✓「${authorName}」の世界観ポストを更新しました！下のリンクから公式Xでお知らせできます。`;
+            showGlobalAdminFeedback(`✓「${authorName}」の世界観ポストを更新しました！`);
+            setTimeout(() => { if (fb) fb.textContent = ""; }, 4000);
+            return;
+          }
+        }
+
         const newPost = {
           id: "tl-post-" + Date.now(),
           date: dateVal,
@@ -3311,28 +3695,63 @@
           authorCastId,
           badgeText,
           body: bodyVal || "#リベリア_VRC",
-          images: [...state.tlDraftImages],
-          xPostUrl,
+          images: imagesList,
+          xPostUrl: "",
           createdAt: Date.now()
         };
 
         state.timeline.unshift(newPost);
-        state.tlDraftImages = [];
-        document.getElementById("tlBodyInput").value = "";
-        document.getElementById("tlCustomAuthorInput").value = "";
-        document.getElementById("tlXPostUrlInput").value = "";
-        updateTlComposerImagesPreview();
+        state.editingTimelinePostId = newPost.id;
         saveStateToStorage();
         renderTimeline();
+        updateAdminPreviews();
+        loadTimelinePostIntoEditor(newPost.id);
+        updateAdminTimelineShareBox(newPost);
 
         const fb = document.getElementById("tlPostFeedback");
         if (fb) {
-          fb.textContent = "✓ タイムラインに投稿しました！";
-          setTimeout(() => {
-            fb.textContent = "";
-            document.getElementById("inlineTimelineComposerCard")?.classList.add("hidden");
-          }, 1200);
+          fb.textContent = `✓「${authorName}」としてタイムラインに投稿しました！下の専用リンクから公式Xでお知らせできます。`;
+          showGlobalAdminFeedback(`✓「${authorName}」の世界観Xポストを投稿しました！`);
+          setTimeout(() => { fb.textContent = ""; }, 4000);
         }
+      });
+
+      document.getElementById("copyAdminTimelineLinkBtn").addEventListener("click", () => {
+        const linkInput = document.getElementById("adminTimelineDirectLinkInput");
+        if (!linkInput || !linkInput.value) return;
+        copyTextToClipboard(linkInput.value, () => {
+          const st = document.getElementById("adminTimelineShareStatus");
+          if (st) {
+            st.textContent = "✓ 投稿の専用リンクをコピーしました！";
+            setTimeout(() => { st.textContent = ""; }, 2500);
+          }
+        });
+      });
+
+      document.getElementById("copyAdminTimelineAnnounceTextBtn").addEventListener("click", () => {
+        const p = state.timeline.find(item => item.id === state.editingTimelinePostId);
+        if (!p) return;
+        copyTextToClipboard(buildTimelinePostAnnounceText(p), () => {
+          const st = document.getElementById("adminTimelineShareStatus");
+          if (st) {
+            st.textContent = "✓ 公式Xお知らせ文＋専用リンクをコピーしました！";
+            setTimeout(() => { st.textContent = ""; }, 2500);
+          }
+        });
+      });
+
+      document.getElementById("deleteSelectedTimelinePostBtn").addEventListener("click", () => {
+        if (!state.editingTimelinePostId || state.editingTimelinePostId === "NEW") return;
+        const idx = state.timeline.findIndex(p => p.id === state.editingTimelinePostId);
+        if (idx === -1) return;
+        const removedAuthor = state.timeline[idx].authorName;
+        state.timeline.splice(idx, 1);
+        state.editingTimelinePostId = "NEW";
+        saveStateToStorage();
+        renderTimeline();
+        updateAdminPreviews();
+        loadTimelinePostIntoEditor("NEW");
+        showGlobalAdminFeedback(`✓「${removedAuthor}」のタイムライン投稿を削除しました。`);
       });
 
       // Admin Controls
@@ -3457,6 +3876,8 @@
             renderActorCrossTable();
             renderReports();
             renderReportCastCheckboxes(getCheckedReportCastNames());
+            populateTimelineAuthorSelect();
+            renderTimeline();
             updateAdminPreviews();
             const fb = document.getElementById("addCastFeedback");
             fb.textContent = `✓ No.${String(target.no).padStart(2, "0")}「${name}」の編集内容を上書き保存しました！`;
@@ -3502,6 +3923,8 @@
         renderCasts();
         renderActorCrossTable();
         renderReportCastCheckboxes(getCheckedReportCastNames());
+            populateTimelineAuthorSelect();
+            renderTimeline();
         updateAdminPreviews();
         loadCastIntoEditor(newCast.id);
 
@@ -3528,6 +3951,8 @@
         renderCasts();
         renderActorCrossTable();
         renderReportCastCheckboxes(getCheckedReportCastNames());
+            populateTimelineAuthorSelect();
+            renderTimeline();
         updateAdminPreviews();
         loadCastIntoEditor("NEW");
         showGlobalAdminFeedback(`✓ キャスト「${removedName}」を削除しました。`);
@@ -3696,6 +4121,8 @@
         renderCastFilterTabs();
         renderCasts();
         renderReportCastCheckboxes(getCheckedReportCastNames());
+            populateTimelineAuthorSelect();
+            renderTimeline();
         updateAdminPreviews();
 
         const fb = document.getElementById("factionSaveFeedback");
@@ -3717,6 +4144,8 @@
         renderCastFilterTabs();
         renderCasts();
         renderReportCastCheckboxes(getCheckedReportCastNames());
+            populateTimelineAuthorSelect();
+            renderTimeline();
         updateAdminPreviews();
       });
 
