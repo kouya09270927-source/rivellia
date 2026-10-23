@@ -79,6 +79,11 @@
       margin-top: 1.4em;
     }
 
+    .report-highlight-ring {
+      border-color: #f0d78c !important;
+      box-shadow: 0 0 0 2px rgba(240, 215, 140, 0.55), 0 20px 50px -10px rgba(212, 175, 55, 0.35) !important;
+    }
+
     ::-webkit-scrollbar {
       width: 8px;
       height: 8px;
@@ -344,7 +349,7 @@
     </section>
 
     <!-- ==========================================
-         3. キャスト紹介 (Cast) ★画像付き登録・編集対応＆NG項目なし
+         3. キャスト紹介 (Cast) ★画像・Xアイコン対応＆整理済み
          ========================================== -->
     <section id="sec-cast" class="page-section py-16 sm:py-24 border-b border-[#d4af37]/25 bg-[#09090f]/80">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -411,7 +416,7 @@
             </div>
           </div>
 
-          <!-- Sub-category filter bar (shown when 中立 is active) -->
+          <!-- Sub-category filter bar (hidden compatibility) -->
           <div id="subCategoryFilterBar" class="hidden pt-3 border-t border-[#d4af37]/15 flex flex-wrap items-center gap-2 text-xs">
             <span class="text-[#9c9480]">中立区分:</span>
             <button type="button" data-sub-faction="ALL" class="sub-faction-btn px-3 py-1 rounded-lg bg-[#7dd3fc]/20 text-[#7dd3fc] border border-[#7dd3fc]/40 font-semibold">すべて</button>
@@ -477,7 +482,7 @@
     </section>
 
     <!-- ==========================================
-         4. 営業記録・アーカイブ (Report / Archive)
+         4. 営業記録・アーカイブ (Report / Archive) ★画像＆X告知リンク対応
          ========================================== -->
     <section id="sec-archive" class="page-section py-16 sm:py-24 border-b border-[#d4af37]/20">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -555,10 +560,10 @@
                 <article class="p-5 rounded-xl bg-[#12121c] border border-[#d4af37]/20 space-y-2">
                   <div class="flex items-center justify-between text-xs">
                     <span class="font-semibold text-[#f0d78c]">魔法少女と悪のノクターンサロン Rivellia広報</span>
-                    <span class="text-[#9c9480]">2026.10.18</span>
+                    <span class="text-[#9c9480]">Official</span>
                   </div>
                   <p class="text-xs sm:text-sm text-[#ece6d9] leading-relaxed">
-                    魔法少女・悪・中立のキャスト名鑑および営業記録を公開いたしました。今宵も静かな燭台の灯りとともに、ご来訪をお待ちしております。 <span class="text-[#f0d78c]">#リベリア_VRC</span>
+                    営業記録を投稿した際は、各記録の「𝕏 Xで共有・告知ポスト」ボタンから記事への直接リンク付きアナウンスを簡単に投稿できます。 <span class="text-[#f0d78c]">#リベリア_VRC</span>
                   </p>
                 </article>
                 <div class="pt-1 text-center">
@@ -633,16 +638,16 @@
     <span id="vespera"></span>
     <span id="modalCastRomaji"></span>
     <span id="modalCastShortBio"></span>
+    <span id="modalCastServiceStyle"></span>
     <div id="modalCastTags"></div>
     <ul id="modalCastTopics"></ul>
     <ul id="modalCastNgItems"></ul>
+    <input id="newCastSubName" type="text">
+    <input id="newCastRawFaction" type="text">
+    <textarea id="newCastService"></textarea>
     <textarea id="newCastNg"></textarea>
-    <div id="galleryLightboxModal">
-      <span id="lightboxReportTitle"></span>
-      <button id="closeLightboxBtn" type="button">✕ 閉じる</button>
-      <span id="lightboxImage"></span>
-      <p id="lightboxCaption"></p>
-    </div>
+    <input id="newReportCategory" type="text" value="通常営業レポート">
+    <input id="newReportCasts" type="text">
     <button type="button" data-page-route="home" class="page-route-btn">Home トップ</button>
     <button type="button" data-page-route="about" class="page-route-btn">About 世界観・三陣営</button>
     <button type="button" data-page-route="faction_a" class="page-route-btn">✦ 魔法少女ページ 27名｜Page分け</button>
@@ -693,6 +698,7 @@
     <button type="button" data-page-route="home" class="page-route-btn">審判役・中立 (1名)</button>
     <button type="button" data-page-route="home" class="page-route-btn">＋ 営業記録を追加 (管理者)</button>
     <button type="button" data-page-route="home" class="page-route-btn">新規入力フォームをクリア</button>
+    <button type="button" data-page-route="home" class="page-route-btn">新規投稿フォームをクリア</button>
     <button type="button" data-page-route="home" class="page-route-btn">🔒 主催・管理者ログイン（データ編集ロック解除）</button>
     <button type="button" data-page-route="home" class="page-route-btn">1. 陣営名の一括変更 (`config.json`)</button>
     <button type="button" data-page-route="home" class="page-route-btn">2. キャスト追加・`casts.json` 出力</button>
@@ -704,7 +710,7 @@
   </div>
 
   <!-- =========================================================
-       MODAL 1: Cast Detail Modal (Supports Portrait Image + Direct Edit)
+       MODAL 1: Cast Detail Modal (Supports Portrait Image + X Icon + Direct Edit)
        ========================================================= -->
   <div id="castDetailModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/85 backdrop-blur-md p-3 sm:p-6 lg:p-10" role="dialog" aria-modal="true" aria-labelledby="modalCastName">
     <div class="max-w-4xl mx-auto my-4 card-nocturne rounded-3xl border border-[#d4af37]/50 overflow-hidden shadow-2xl">
@@ -712,6 +718,7 @@
       <div class="sticky top-0 z-20 flex flex-wrap items-center justify-between gap-2 px-5 py-4 bg-[#0b0b12]/95 border-b border-[#d4af37]/30 backdrop-blur">
         <div class="flex items-center gap-2.5">
           <span id="modalCastFactionBadge" class="px-3.5 py-1 rounded-full text-xs font-semibold border"></span>
+          <span id="modalCastXLinkWrap"></span>
         </div>
 
         <div class="flex items-center gap-2">
@@ -747,19 +754,11 @@
           </blockquote>
         </div>
 
-        <!-- Service Style Box (Single Clean Full-Width Box, No NG Section) -->
-        <div class="rounded-2xl bg-[#101018] border border-[#d4af37]/25 p-5 sm:p-6 space-y-2.5">
-          <div class="text-xs font-semibold text-[#f0d78c] tracking-wider flex items-center gap-1.5">
-            <span>✦</span> 接客スタイル
-          </div>
-          <p id="modalCastServiceStyle" class="text-xs sm:text-sm text-[#ece6d9] leading-relaxed whitespace-pre-line"></p>
-        </div>
-
-        <!-- Long-Form RP Self-Introduction (ＲＰ自己紹介) -->
+        <!-- Long-Form RP Self-Introduction (自己紹介文) -->
         <div class="rounded-2xl bg-[#09090f] border border-[#d4af37]/30 p-6 sm:p-8 lg:p-10">
           <div class="border-b border-[#d4af37]/25 pb-4 mb-6">
             <span class="font-display text-xs tracking-[0.25em] text-[#d4af37] uppercase">PROFILE &amp; LORE</span>
-            <h4 class="font-serif-jp text-xl sm:text-2xl font-bold text-[#f7f2e6] mt-0.5">ＲＰ自己紹介</h4>
+            <h4 class="font-serif-jp text-xl sm:text-2xl font-bold text-[#f7f2e6] mt-0.5">自己紹介文</h4>
           </div>
           <div id="modalCastStory" class="reading-prose mx-auto"></div>
         </div>
@@ -776,6 +775,24 @@
             <span>次のキャスト →</span>
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL 2: Report Image Lightbox Modal
+       ========================================================= -->
+  <div id="galleryLightboxModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4" role="dialog" aria-modal="true">
+    <div class="max-w-4xl w-full card-nocturne rounded-3xl border border-[#d4af37]/50 overflow-hidden shadow-2xl">
+      <div class="flex items-center justify-between px-5 py-3.5 bg-[#0b0b12] border-b border-[#d4af37]/30">
+        <span id="lightboxReportTitle" class="font-serif-jp text-sm sm:text-base font-bold text-[#f0d78c]">営業記録 画像プレビュー</span>
+        <button id="closeLightboxBtn" type="button" class="px-3.5 py-1.5 rounded-xl bg-[#1b1b29] hover:bg-[#29293d] text-xs font-semibold text-[#f0d78c] border border-[#d4af37]/40">
+          ✕ 閉じる
+        </button>
+      </div>
+      <div class="p-4 sm:p-6 bg-[#07070c] flex flex-col items-center justify-center">
+        <img id="lightboxImage" src="data:image/png;base64,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" alt="" class="max-h-[75vh] w-auto max-w-full rounded-2xl object-contain border border-[#d4af37]/30">
+        <p id="lightboxCaption" class="text-xs text-[#c7bfa8] mt-3"></p>
       </div>
     </div>
   </div>
@@ -825,7 +842,7 @@
   </div>
 
   <!-- =========================================================
-       MODAL 3: In-Site Admin Editor (Cast Register/Edit + Image Upload, Report Post, GitHub Sync)
+       MODAL 3: In-Site Admin Editor (Streamlined Cast Form + Report Form with Cast Checkboxes, Images & X Announcement Link)
        ========================================================= -->
   <div id="adminDataModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/85 backdrop-blur-md p-3 sm:p-6" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
     <div class="max-w-5xl mx-auto my-4 card-nocturne rounded-3xl border border-[#d4af37]/55 overflow-hidden shadow-2xl">
@@ -866,7 +883,10 @@
       </div>
 
       <div class="p-6 sm:p-8 space-y-6">
-        <!-- TAB 1 (tab-add-cast): Cast Edit & New Registration + Image Upload -->
+        <!-- =======================================================
+             TAB 1 (tab-add-cast): Streamlined Cast Form
+             Items: キャスト名（必須）, 所属カテゴリー, 演者名, Xのリンク, 一言セリフ, キャスト画像, 自己紹介文
+             ======================================================= -->
         <div id="tab-add-cast" class="admin-tab-panel space-y-6">
 
           <!-- Visual List of Registered Casts for Quick Later Editing -->
@@ -874,7 +894,7 @@
             <div class="flex flex-wrap items-center justify-between gap-2">
               <div>
                 <h4 class="text-xs sm:text-sm font-bold text-[#f0d78c]">登録済みキャスト一覧（クリックでいつでも再編集・削除可能）</h4>
-                <p class="text-[11px] text-[#9c9480] mt-0.5">登録した人はここに一覧表示されます。「✎ 編集」を押すと下のフォームに読み込まれ、文章や画像を何度でも修正できます。</p>
+                <p class="text-[11px] text-[#9c9480] mt-0.5">登録した人はここに表示され、「2. 営業記録の投稿・編集」の参加キャスト選択チェックボックスにも自動で追加されます。</p>
               </div>
               <button id="switchToNewCastModeBtn" type="button" class="px-3.5 py-2 rounded-xl bg-[#d4af37]/20 hover:bg-[#d4af37]/30 border border-[#d4af37]/45 text-xs font-semibold text-[#f0d78c] whitespace-nowrap transition">
                 ＋ 新規登録フォームに切り替える
@@ -894,7 +914,7 @@
             </div>
           </div>
 
-          <!-- Cast Input / Edit Form -->
+          <!-- Streamlined Cast Input / Edit Form -->
           <div class="p-5 sm:p-6 rounded-2xl bg-[#10101a] border border-[#d4af37]/35 space-y-5">
             <div class="flex items-center justify-between border-b border-[#d4af37]/20 pb-3">
               <span id="castFormModeBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-[#d4af37]/20 text-[#f0d78c] border border-[#d4af37]/40">
@@ -902,40 +922,39 @@
               </span>
             </div>
 
+            <!-- Row 1: キャスト名（必須） / 所属カテゴリー / 演者名 -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <label class="block text-xs text-[#b5ae9e]">キャスト名（必須）
-                <input id="newCastName" type="text" placeholder="例：ルル" class="mt-1 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/35 text-sm text-[#f5efe2]">
+              <label class="block text-xs text-[#f0d78c] font-semibold">キャスト名（必須）
+                <input id="newCastName" type="text" placeholder="例：ルル" class="mt-1.5 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/40 text-sm text-[#f5efe2] font-normal focus:outline-none focus:border-[#d4af37]">
               </label>
-              <label class="block text-xs text-[#b5ae9e]">サブ表記・二つ名（任意）
-                <input id="newCastSubName" type="text" placeholder="例：（あだ名：るるちゃん）" class="mt-1 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/35 text-sm text-[#f5efe2]">
-              </label>
-              <label class="block text-xs text-[#b5ae9e]">所属カテゴリー
-                <select id="newCastFaction" class="mt-1 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/35 text-sm text-[#f5efe2]">
+              <label class="block text-xs text-[#f0d78c] font-semibold">所属カテゴリー
+                <select id="newCastFaction" class="mt-1.5 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/40 text-sm text-[#f5efe2] font-normal focus:outline-none focus:border-[#d4af37]">
                   <option value="faction_a">魔法少女</option>
                   <option value="faction_b">悪</option>
                   <option value="faction_c">中立</option>
                 </select>
               </label>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <label class="block text-xs text-[#b5ae9e]">演者名（プレイヤー名）
-                <input id="newCastTitle" type="text" placeholder="例：るんるんなかんがるー" class="mt-1 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/35 text-sm text-[#f5efe2]">
-              </label>
-              <label class="block text-xs text-[#b5ae9e]">表示用の詳細区分名（任意：審判役・中立など）
-                <input id="newCastRawFaction" type="text" placeholder="未入力なら所属カテゴリー名を使用" class="mt-1 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/35 text-sm text-[#f5efe2]">
-              </label>
-              <label class="block text-xs text-[#b5ae9e]">一言セリフ・引用
-                <input id="newCastQuote" type="text" placeholder="例：「今宵も良き物語を。」" class="mt-1 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/35 text-sm text-[#f5efe2]">
+              <label class="block text-xs text-[#f0d78c] font-semibold">演者名
+                <input id="newCastTitle" type="text" placeholder="例：るんるんなかんがるー" class="mt-1.5 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/40 text-sm text-[#f5efe2] font-normal focus:outline-none focus:border-[#d4af37]">
               </label>
             </div>
 
-            <!-- Cast Image Registration Section -->
+            <!-- Row 2: 一言セリフ / Xのリンク（一覧ではアイコンのみ表示） -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <label class="block text-xs text-[#f0d78c] font-semibold">一言セリフ
+                <input id="newCastQuote" type="text" placeholder="例：「今宵も良き物語を。」" class="mt-1.5 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/40 text-sm text-[#f5efe2] font-normal focus:outline-none focus:border-[#d4af37]">
+              </label>
+              <label class="block text-xs text-[#f0d78c] font-semibold">X（旧Twitter）のリンク（一覧にはXアイコンのみ表示）
+                <input id="newCastXUrl" type="text" placeholder="例：https://x.com/username または @username" class="mt-1.5 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/40 text-sm text-[#f5efe2] font-normal focus:outline-none focus:border-[#d4af37]">
+              </label>
+            </div>
+
+            <!-- Row 3: キャスト画像 -->
             <div class="p-4 rounded-2xl bg-[#0b0b14] border border-[#d4af37]/30 space-y-3">
               <div class="flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <span class="text-xs font-bold text-[#f0d78c]">🖼 キャスト画像（任意・後から追加や変更も可能）</span>
-                  <p class="text-[11px] text-[#9c9480] mt-0.5">画像ファイルを選択すると自動で適切なサイズに軽量化され、カードと詳細画面に表示されます（未設定ならテキストのみで表示）。</p>
+                  <span class="text-xs font-bold text-[#f0d78c]">🖼 キャスト画像</span>
+                  <p class="text-[11px] text-[#9c9480] mt-0.5">画像ファイルを選択すると自動で軽量化され、カードと詳細画面に表示されます。</p>
                 </div>
                 <button id="clearNewCastImageBtn" type="button" class="hidden px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-400/35 text-xs transition">
                   ✕ 画像をクリア
@@ -960,15 +979,10 @@
               </div>
             </div>
 
-            <div>
-              <label class="block text-xs text-[#b5ae9e]">接客スタイル
-                <textarea id="newCastService" rows="2" placeholder="例：雑談寄り・ロールプレイ歓迎" class="mt-1 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/35 text-sm text-[#f5efe2]"></textarea>
-              </label>
-            </div>
-
-            <label class="block text-xs text-[#b5ae9e]">
-              <span class="text-[#f0d78c] font-semibold">ＲＰ自己紹介（本文）</span> — 空行を入れると段落が分かれます
-              <textarea id="newCastStory" rows="8" placeholder="ここにRP自己紹介の本文を入力します..." class="mt-1.5 w-full px-4 py-3 rounded-xl bg-[#0c0c14] border border-[#d4af37]/40 text-sm text-[#f5efe2] leading-relaxed font-serif-jp"></textarea>
+            <!-- Row 4: 自己紹介文 -->
+            <label class="block text-xs text-[#f0d78c] font-semibold">
+              自己紹介文 <span class="text-[#9c9480] font-normal">— 空行を入れると段落が分かれます</span>
+              <textarea id="newCastStory" rows="7" placeholder="ここに自己紹介文を入力します..." class="mt-1.5 w-full px-4 py-3 rounded-xl bg-[#0c0c14] border border-[#d4af37]/40 text-sm text-[#f5efe2] font-normal leading-relaxed font-serif-jp focus:outline-none focus:border-[#d4af37]"></textarea>
             </label>
 
             <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
@@ -994,53 +1008,157 @@
           </details>
         </div>
 
-        <!-- TAB 2 (tab-add-report): Report Posting & Editing -->
-        <div id="tab-add-report" class="admin-tab-panel hidden space-y-5">
-          <div class="p-4 rounded-2xl bg-[#0b0b14] border border-[#d4af37]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div class="flex-1">
-              <label class="block text-xs font-semibold text-[#f0d78c] mb-1.5">
-                編集する営業記録を選択（または「＋ 新しい営業記録を投稿」を選択）
-              </label>
-              <select id="adminReportEditSelector" class="w-full px-3.5 py-2.5 rounded-xl bg-[#141422] border border-[#d4af37]/40 text-sm text-[#f5efe2] focus:outline-none focus:border-[#d4af37]">
+        <!-- =======================================================
+             TAB 2 (tab-add-report): Streamlined Report Form
+             Features:
+             - Auto-populated Cast Checkboxes from state.casts
+             - Report Image Upload (single/multiple)
+             - Direct Link & Official X Announcement Generator
+             ======================================================= -->
+        <div id="tab-add-report" class="admin-tab-panel hidden space-y-6">
+
+          <!-- Top Selector & Visual List of Posted Reports -->
+          <div class="p-5 rounded-2xl bg-[#0b0b14] border border-[#d4af37]/30 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h4 class="text-xs sm:text-sm font-bold text-[#f0d78c]">投稿済み営業記録一覧（クリックで再編集・削除・X告知リンク取得）</h4>
+                <p class="text-[11px] text-[#9c9480] mt-0.5">営業記録を投稿すると下に専用リンクと公式X告知ボタンが生成されます。</p>
+              </div>
+              <button id="switchToNewReportModeBtn" type="button" class="px-3.5 py-2 rounded-xl bg-[#d4af37]/20 hover:bg-[#d4af37]/30 border border-[#d4af37]/45 text-xs font-semibold text-[#f0d78c] whitespace-nowrap transition">
+                ＋ 新規投稿フォームに切り替える
+              </button>
+            </div>
+
+            <div class="pt-1">
+              <select id="adminReportEditSelector" aria-label="編集する営業記録を選択" class="w-full px-3.5 py-2 rounded-xl bg-[#141422] border border-[#d4af37]/40 text-xs sm:text-sm text-[#f5efe2] focus:outline-none focus:border-[#d4af37]">
                 <option value="NEW">＋ 新しい営業記録を投稿する</option>
               </select>
             </div>
-            <button id="switchToNewReportModeBtn" type="button" class="px-3.5 py-2.5 rounded-xl bg-[#181826] hover:bg-[#242438] border border-[#d4af37]/35 text-xs text-[#f0d78c] whitespace-nowrap">
-              新規投稿フォームをクリア
-            </button>
-          </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <label class="block text-xs text-[#b5ae9e]">開催日
-              <input id="newReportDate" type="text" value="2026.10.25" class="mt-1 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/35 text-sm text-[#f5efe2]">
-            </label>
-            <label class="block text-xs text-[#b5ae9e]">種別ラベル
-              <input id="newReportCategory" type="text" value="通常営業レポート" class="mt-1 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/35 text-sm text-[#f5efe2]">
-            </label>
-            <label class="block text-xs text-[#b5ae9e]">記事タイトル
-              <input id="newReportTitle" type="text" placeholder="例：第二夜 営業記録" class="mt-1 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/35 text-sm text-[#f5efe2]">
-            </label>
-          </div>
-          <label class="block text-xs text-[#b5ae9e]">参加キャスト（カンマまたは読点区切り）
-            <input id="newReportCasts" type="text" placeholder="例：ルル, ましろ" class="mt-1 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/35 text-sm text-[#f5efe2]">
-          </label>
-          <label class="block text-xs text-[#b5ae9e]">本文（改行で段落分け）
-            <textarea id="newReportBody" rows="6" placeholder="営業風景のレポート本文を入力..." class="mt-1 w-full px-4 py-3 rounded-xl bg-[#0c0c14] border border-[#d4af37]/40 text-sm text-[#f5efe2] leading-relaxed font-serif-jp"></textarea>
-          </label>
-
-          <div class="flex flex-wrap items-center justify-between gap-3">
-            <div class="flex flex-wrap items-center gap-3">
-              <button id="addReportPreviewBtn" type="button" class="px-6 py-3 rounded-xl bg-gradient-to-r from-[#b89028] via-[#d4af37] to-[#b89028] text-[#09090d] font-bold text-xs sm:text-sm hover:brightness-110 transition">
-                <span id="saveReportBtnLabel">✓ 営業記録を投稿・保存する</span>
-              </button>
-              <button id="deleteSelectedReportBtn" type="button" class="hidden px-4 py-3 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-400/40 text-xs font-semibold text-rose-200 transition">
-                この営業記録を削除
-              </button>
-              <span id="addReportFeedback" class="text-xs text-emerald-300 font-medium"></span>
+            <div id="adminRegisteredReportsList" class="max-h-40 overflow-y-auto space-y-1.5 pt-1">
+              <!-- Populated dynamically by renderAdminRegisteredReportsList() -->
             </div>
-            <button id="copyReportMdBtn" type="button" class="px-4 py-2.5 rounded-xl bg-[#181826] border border-[#d4af37]/35 text-xs text-[#f0d78c]">
-              生成された `.md` 原稿をコピー
-            </button>
+          </div>
+
+          <!-- Streamlined Report Input / Edit Form -->
+          <div class="p-5 sm:p-6 rounded-2xl bg-[#10101a] border border-[#d4af37]/35 space-y-5">
+            <div class="flex items-center justify-between border-b border-[#d4af37]/20 pb-3">
+              <span id="reportFormModeBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-[#d4af37]/20 text-[#f0d78c] border border-[#d4af37]/40">
+                ＋ 新規営業記録 投稿モード
+              </span>
+            </div>
+
+            <!-- Row 1: 開催日 & 記事タイトル -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <label class="block text-xs text-[#f0d78c] font-semibold">開催日
+                <input id="newReportDate" type="text" value="2026.10.25" placeholder="例：2026.10.25" class="mt-1.5 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/40 text-sm text-[#f5efe2] font-normal focus:outline-none focus:border-[#d4af37]">
+              </label>
+              <label class="block text-xs text-[#f0d78c] font-semibold sm:col-span-2">記事タイトル
+                <input id="newReportTitle" type="text" placeholder="例：第一夜 営業記録" class="mt-1.5 w-full px-3.5 py-2.5 rounded-xl bg-[#141420] border border-[#d4af37]/40 text-sm text-[#f5efe2] font-normal focus:outline-none focus:border-[#d4af37]">
+              </label>
+            </div>
+
+            <!-- Row 2: 参加キャスト（チェックボックス式・キャスト一覧から自動追加） -->
+            <div class="p-4 rounded-2xl bg-[#0b0b14] border border-[#d4af37]/30 space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <span class="text-xs font-bold text-[#f0d78c]">✦ 参加キャスト（チェックボックス選択）</span>
+                  <p class="text-[11px] text-[#9c9480] mt-0.5">キャスト一覧に登録した人が自動でここに並びます。参加したキャストにチェックを入れてください。</p>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <button id="selectAllReportCastsBtn" type="button" class="px-2.5 py-1 rounded-lg bg-[#181828] hover:bg-[#242438] text-[#f0d78c] border border-[#d4af37]/30 text-[11px] transition">
+                    すべて選択
+                  </button>
+                  <button id="clearAllReportCastsBtn" type="button" class="px-2.5 py-1 rounded-lg bg-[#181828] hover:bg-[#242438] text-[#c7bfa8] border border-[#d4af37]/20 text-[11px] transition">
+                    選択解除
+                  </button>
+                </div>
+              </div>
+
+              <div id="reportCastCheckboxesContainer" class="pt-1">
+                <!-- Populated dynamically from state.casts -->
+              </div>
+            </div>
+
+            <!-- Row 3: 営業記録の画像（複数枚アップロード対応） -->
+            <div class="p-4 rounded-2xl bg-[#0b0b14] border border-[#d4af37]/30 space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <span class="text-xs font-bold text-[#f0d78c]">🖼 営業記録の画像（複数枚登録可能）</span>
+                  <p class="text-[11px] text-[#9c9480] mt-0.5">営業風景のスクリーンショットや記念写真を選択すると自動で軽量化されて記事内に掲載されます。</p>
+                </div>
+                <button id="clearNewReportImagesBtn" type="button" class="hidden px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-400/35 text-xs transition">
+                  ✕ 画像をすべてクリア
+                </button>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 items-end">
+                <label class="block text-xs text-[#ece6d9]">
+                  <span class="block mb-1 text-[#b5ae9e]">パソコン・スマホから画像を選択（複数選択可）</span>
+                  <input id="newReportImageFiles" type="file" accept="image/*" multiple class="w-full text-xs text-[#c7bfa8] file:mr-3 file:py-2 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#d4af37] file:text-[#09090d] hover:file:brightness-110 cursor-pointer">
+                </label>
+                <div class="flex items-center gap-2">
+                  <label class="block text-xs text-[#b5ae9e] flex-1">
+                    または画像URLを追加（任意）
+                    <input id="newReportImageUrl" type="text" placeholder="https://..." class="mt-1 w-full px-3 py-2 rounded-xl bg-[#141420] border border-[#d4af37]/30 text-xs text-[#f5efe2]">
+                  </label>
+                  <button id="addReportImageUrlBtn" type="button" class="px-3 py-2 rounded-xl bg-[#181828] hover:bg-[#25253c] text-xs font-semibold text-[#f0d78c] border border-[#d4af37]/35 shrink-0">
+                    ＋追加
+                  </button>
+                </div>
+              </div>
+
+              <!-- Report Images Preview Grid -->
+              <div id="newReportImagesPreviewWrap" class="hidden pt-2 grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Row 4: 本文 -->
+            <label class="block text-xs text-[#f0d78c] font-semibold">
+              本文 <span class="text-[#9c9480] font-normal">— 改行で段落が分かれます</span>
+              <textarea id="newReportBody" rows="6" placeholder="営業風景のレポート本文を入力..." class="mt-1.5 w-full px-4 py-3 rounded-xl bg-[#0c0c14] border border-[#d4af37]/40 text-sm text-[#f5efe2] font-normal leading-relaxed font-serif-jp focus:outline-none focus:border-[#d4af37]"></textarea>
+            </label>
+
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+              <div class="flex flex-wrap items-center gap-3">
+                <button id="addReportPreviewBtn" type="button" class="px-6 py-3 rounded-xl bg-gradient-to-r from-[#b89028] via-[#d4af37] to-[#b89028] text-[#09090d] font-bold text-xs sm:text-sm hover:brightness-110 transition shadow-lg">
+                  <span id="saveReportBtnLabel">✓ 営業記録を投稿・保存する</span>
+                </button>
+                <button id="deleteSelectedReportBtn" type="button" class="hidden px-4 py-3 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-400/40 text-xs font-semibold text-rose-200 transition">
+                  この営業記録を削除
+                </button>
+                <span id="addReportFeedback" class="text-xs text-emerald-300 font-medium"></span>
+              </div>
+              <button id="copyReportMdBtn" type="button" class="px-4 py-2.5 rounded-xl bg-[#181826] border border-[#d4af37]/35 text-xs text-[#f0d78c]">
+                生成された `.md` 原稿をコピー
+              </button>
+            </div>
+
+            <!-- Official X Announcement & Direct Report Link Box -->
+            <div id="adminReportShareBox" class="hidden p-5 rounded-2xl bg-[#091318] border border-emerald-400/40 space-y-3">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-emerald-300">🔗 投稿した営業記録の専用リンク ＆ 公式Xアナウンス作成</span>
+                <span id="adminReportShareStatus" class="text-xs text-[#f0d78c]"></span>
+              </div>
+              <p class="text-[11px] text-[#c7bfa8]">
+                このリンクをX（旧Twitter）に貼ると、クリックした人がこの営業記録へ直接ジャンプできます（※GitHubへHTML反映後に全閲覧者へ有効になります）。
+              </p>
+              <div class="flex flex-col sm:flex-row gap-2">
+                <input id="adminReportDirectLinkInput" type="text" readonly class="flex-1 px-3.5 py-2 rounded-xl bg-[#06060a] border border-[#d4af37]/35 text-xs text-[#f0d78c] font-mono">
+                <button id="copyAdminReportLinkBtn" type="button" class="px-4 py-2 rounded-xl bg-[#161626] hover:bg-[#222238] border border-[#d4af37]/45 text-xs font-bold text-[#f0d78c] whitespace-nowrap">
+                  🔗 記録のリンクをコピー
+                </button>
+              </div>
+              <div class="flex flex-wrap items-center gap-2.5 pt-1">
+                <a id="postAdminReportToXBtn" href="https://x.com/intent/tweet" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#d4af37] hover:brightness-110 text-[#09090d] font-bold text-xs transition">
+                  <span>𝕏 公式Xで「営業記録を投稿しました」とアナウンスする ↗</span>
+                </a>
+                <button id="copyAdminReportAnnounceTextBtn" type="button" class="px-4 py-2.5 rounded-xl bg-[#141422] hover:bg-[#1f1f32] text-[#ece6d9] border border-[#d4af37]/35 text-xs font-medium transition">
+                  📋 告知文＋リンクをコピー
+                </button>
+              </div>
+            </div>
           </div>
 
           <details class="rounded-xl bg-[#090910] border border-[#d4af37]/20 p-3">
@@ -1109,9 +1227,9 @@
               コードを一切触らずに GitHub Pages へ反映する方法
             </h4>
             <ol class="list-decimal list-inside space-y-2 text-xs sm:text-sm text-[#ece6d9] leading-relaxed">
-              <li>この管理画面で<strong>キャストの登録・編集（画像・文章）</strong>、または<strong>営業記録の投稿</strong>を行い「保存」を押します（お使いのブラウザには即座に自動保存されます）。</li>
+              <li>この管理画面で<strong>キャストの登録・編集（画像・Xリンク・自己紹介文）</strong>、または<strong>営業記録の投稿（写真・参加キャスト選択・本文）</strong>を行い「保存」を押します（お使いのブラウザには即座に自動保存されます）。</li>
               <li>下の<strong>「更新済みの index.html 全文をコピー」</strong>ボタンをクリックします。</li>
-              <li>GitHubリポジトリの <code class="text-[#f0d78c]">index.html</code>（または <code class="text-[#f0d78c]">docs/index.html</code>）の編集画面を開き、中身をすべて貼り付けて保存（Commit changes）するだけで、画像も含めて全閲覧者の画面に最新の編集内容が反映されます！</li>
+              <li>GitHubリポジトリの <code class="text-[#f0d78c]">index.html</code>（または <code class="text-[#f0d78c]">docs/index.html</code>）の編集画面を開き、中身をすべて貼り付けて保存（Commit changes）するだけで、画像や営業記録のリンクも含めて全閲覧者の画面に最新の編集内容が反映されます！</li>
             </ol>
 
             <div class="flex flex-wrap items-center gap-3 pt-2">
@@ -1133,13 +1251,13 @@
   </div>
 
   <!-- =========================================================
-       APPLICATION SCRIPT (Clean Empty Casts + Image Upload + Manual Admin Registration/Editing)
+       APPLICATION SCRIPT (Clean Empty Casts & Reports + X Icon + Report Images & Share Link + Cast Checkboxes)
        ========================================================= -->
   <script>
-    const STORAGE_KEY = "rivellia_salon_cms_v4_clean";
+    const STORAGE_KEY = "rivellia_salon_cms_v5_clean";
     const DEFAULT_CONFIG = {"salonName": "Rivellia", "salonSubtitle": "魔法少女と悪のノクターンサロン リベリア", "catchphrase": "魔法少女、悪、そして中立――\n三つの立場が交錯する魔法少女と悪のノクターンサロン", "subCatchphrase": "光と闇、そして境界の観測者たちが同じ夜に集い、言葉と物語を紡ぐVRChatサロン。", "organizer": "るんるんなかんがるー", "hashtag": "#リベリア_VRC", "adminPasscode": "kouya09270927", "factions": {"faction_a": {"id": "faction_a", "pageSlug": "magical", "name": "魔法少女", "legacyName": "カテゴリー：魔法少女", "concept": "光・正義・願いと契約を背負う側", "enTitle": "MAGICAL GIRLS", "color": "#f3d078", "badgeBg": "rgba(243, 208, 120, 0.14)", "badgeBorder": "rgba(243, 208, 120, 0.55)", "description": "人々の願いや契約、あるいは過酷な宿命を背負いながら戦う魔法少女たち。純粋な希望からほろ苦い代償まで、多彩な物語を抱えてサロンの夜に集う。"}, "faction_b": {"id": "faction_b", "pageSlug": "evil", "name": "悪", "legacyName": "カテゴリー：悪", "concept": "闇・混沌・深淵と誘惑の側", "enTitle": "FORCES OF EVIL", "color": "#c084fc", "badgeBg": "rgba(192, 132, 252, 0.14)", "badgeBorder": "rgba(192, 132, 252, 0.55)", "description": "怪異、悪魔貴族、魔女、深淵の支配者、あるいは独自の美学で夜を歩む『悪』の陣営。甘美な誘惑や知的な語り口で客人を非日常へと誘う。"}, "faction_c": {"id": "faction_c", "pageSlug": "neutral", "name": "中立", "legacyName": "カテゴリー：中立（審判役・IL含む）", "concept": "境界・観測者・審判と物語を見届ける側", "enTitle": "NEUTRAL & OBSERVERS", "color": "#7dd3fc", "badgeBg": "rgba(125, 211, 252, 0.14)", "badgeBorder": "rgba(125, 211, 252, 0.55)", "description": "魔法少女と悪の狭間に立ち、誰かを裁くことなく選択と物語を見届ける『中立』『中立（IL）』『審判役・中立』の陣営。情報屋や劇作家、観測者たちが集う。"}}};
     const INITIAL_CASTS = [];
-    const INITIAL_REPORTS = [{"id": "2026-10-18-opening-nocturne", "date": "2026.10.18", "title": "第一夜「月光と黒金のプレリュード」営業記録", "category": "通常営業レポート", "markdownSource": "content/reports/2026-10-18-opening-nocturne.md", "casts": [], "summary": "魔法少女と悪のノクターンサロン Rivelliaの第一夜。魔法少女・悪・中立の三陣営が同じ燭台の灯りのもとに集い、来訪者と物語を紡いだ一夜の記録です。", "body": ["宵闇が深く降りた頃、黒と金を基調とした魔法少女と悪のノクターンサロン Rivellia（リベリア）の扉が静かに開かれました。魔法少女・悪・中立それぞれの立場を持つキャストたちが同じ空間に並び立ちました。", "テーブルでは、穏やかな雑談から世界観に深く踏み込んだロールプレイまで、訪れるゲスト一人ひとりの気分に合わせた対話が交わされました。『笑っていたい夜も、誰にも言えないことを吐き出したい夜も、ここではどちらも許される』というサロンの理念そのままの時間が流れました。"], "gallery": []}, {"id": "2026-10-04-abyssal-chamber", "date": "2026.10.04", "title": "特別内覧会「三陣営の邂逅とノクターンの夕べ」", "category": "特別イベント記録", "markdownSource": "content/reports/2026-10-04-abyssal-chamber.md", "casts": [], "summary": "光と闇、そして境界の観測者たちが交錯するサロンの幕開けを記録したアーカイブです。", "body": ["魔法少女、悪、そして中立。同じ演者が夜によって異なる陣営の魂として現れることもあれば、宿命の対峙や思いがけない共鳴が生まれることもあります。", "それぞれの選択と物語が交差する場所として、今後も営業記録をこのページに綴っていきます。"], "gallery": []}];
+    const INITIAL_REPORTS = [];
 
     const state = {
       config: JSON.parse(JSON.stringify(DEFAULT_CONFIG)),
@@ -1158,7 +1276,9 @@
       editingCastId: "NEW",
       editingCastImageData: "",
       editingReportId: "NEW",
+      editingReportImages: [],
       selectedReportCast: "ALL",
+      highlightedReportId: null,
       isAdminAuthenticated: false,
       pendingAdminTab: "tab-add-cast",
       adminPasscode: "kouya09270927"
@@ -1198,6 +1318,41 @@
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#39;");
+    }
+
+    function normalizeXUrl(raw) {
+      const s = String(raw ?? "").trim();
+      if (!s) return "";
+      if (/^https?:\/\//i.test(s)) return s;
+      const handle = s.replace(/^@+/, "").trim();
+      if (!handle) return "";
+      return "https://x.com/" + encodeURIComponent(handle);
+    }
+
+    function buildXIconLinkHtml(xUrl, extraClass) {
+      const normalized = normalizeXUrl(xUrl);
+      if (!normalized) return "";
+      return `<a href="${escapeHtml(normalized)}" target="_blank" rel="noopener noreferrer" title="X（旧Twitter）を開く" aria-label="X（旧Twitter）を開く" class="cast-x-icon-link inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#141422] hover:bg-[#d4af37] text-[#f0d78c] hover:text-[#09090d] border border-[#d4af37]/40 transition shrink-0 ${extraClass || ""}">
+        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>`;
+    }
+
+    function getReportShareUrl(reportId) {
+      const base = window.location.href.split("#")[0].split("?")[0];
+      return `${base}?report=${encodeURIComponent(reportId)}#report-${encodeURIComponent(reportId)}`;
+    }
+
+    function buildReportAnnounceText(report) {
+      const url = getReportShareUrl(report.id);
+      const castPart = (report.casts && report.casts.length > 0)
+        ? `\n参加キャスト：${report.casts.join(" / ")}`
+        : "";
+      return `【営業記録を投稿しました】\n${report.date}「${report.title}」${castPart}\n\n公式サイトにて営業記録を公開いたしました。ぜひご覧ください。\n${url}\n#リベリア_VRC`;
+    }
+
+    function buildReportXIntentUrl(report) {
+      const text = buildReportAnnounceText(report);
+      return `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`;
     }
 
     // Compress uploaded image file into a compact Data URI so localStorage and index.html stay fast
@@ -1246,6 +1401,38 @@
         if (wrap) wrap.classList.add("hidden");
         if (clearBtn) clearBtn.classList.add("hidden");
       }
+    }
+
+    function updateReportImagesPreviewUi() {
+      const wrap = document.getElementById("newReportImagesPreviewWrap");
+      const clearBtn = document.getElementById("clearNewReportImagesBtn");
+      if (!wrap) return;
+      if (!state.editingReportImages || state.editingReportImages.length === 0) {
+        wrap.innerHTML = "";
+        wrap.classList.add("hidden");
+        if (clearBtn) clearBtn.classList.add("hidden");
+        return;
+      }
+      wrap.classList.remove("hidden");
+      if (clearBtn) clearBtn.classList.remove("hidden");
+      wrap.innerHTML = state.editingReportImages.map((src, idx) => `
+        <div class="relative group rounded-xl overflow-hidden border border-[#d4af37]/40 bg-[#07070c]">
+          <img src="${escapeHtml(src)}" alt="営業記録画像 ${idx + 1}" class="w-full h-24 object-cover">
+          <button type="button" data-remove-report-img="${idx}" class="remove-report-img-btn absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/80 hover:bg-rose-600 text-white text-xs flex items-center justify-center border border-white/20 transition" title="この画像を削除">
+            ✕
+          </button>
+        </div>
+      `).join("");
+
+      wrap.querySelectorAll(".remove-report-img-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const rmIdx = parseInt(btn.getAttribute("data-remove-report-img"), 10);
+          if (!isNaN(rmIdx)) {
+            state.editingReportImages.splice(rmIdx, 1);
+            updateReportImagesPreviewUi();
+          }
+        });
+      });
     }
 
     function copyTextToClipboard(text, onSuccess) {
@@ -1382,8 +1569,9 @@
       const countB = state.casts.filter(c => c.factionId === "faction_b").length;
       const countC = state.casts.filter(c => c.factionId === "faction_c").length;
 
+      if (subBar) subBar.classList.add("hidden");
+
       if (state.selectedFaction === "ALL") {
-        if (subBar) subBar.classList.add("hidden");
         if (heading) heading.textContent = `在籍キャスト名鑑（全${state.casts.length}名）`;
         banner.innerHTML = `
           <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -1392,7 +1580,7 @@
                 陣営カテゴリーを選択して表示を切り替えられます
               </h3>
               <p class="text-xs sm:text-sm text-[#c7bfa8] mt-1">
-                各カードをクリックすると、詳しい自己紹介とプロフィールが開きます。
+                各カードをクリックすると、自己紹介文の全文とプロフィールが開きます。
               </p>
             </div>
             <div class="flex flex-wrap gap-2.5 shrink-0">
@@ -1411,9 +1599,6 @@
       } else {
         const f = state.config.factions[state.selectedFaction];
         const count = state.casts.filter(c => c.factionId === state.selectedFaction).length;
-        if (subBar) {
-          subBar.classList.toggle("hidden", state.selectedFaction !== "faction_c");
-        }
         if (heading) {
           heading.textContent = `${f.name}（全${count}名）`;
         }
@@ -1554,9 +1739,6 @@
       return state.casts.filter(c => {
         const matchesFaction = state.selectedFaction === "ALL" || c.factionId === state.selectedFaction;
         if (!matchesFaction) return false;
-        if (state.selectedFaction === "faction_c" && state.selectedSubFaction !== "ALL") {
-          if (c.rawFaction !== state.selectedSubFaction) return false;
-        }
         if (state.selectedActor !== "ALL" && c.actor !== state.selectedActor) {
           return false;
         }
@@ -1564,13 +1746,9 @@
         const q = state.searchQuery.trim().toLowerCase();
         const hay = [
           c.name,
-          c.fullName,
-          c.subName,
           c.actor,
           c.rawFaction,
-          c.title,
           c.quote,
-          c.serviceStyle,
           ...(c.story || [])
         ].join(" ").toLowerCase();
         return hay.includes(q);
@@ -1659,7 +1837,7 @@
         container.innerHTML = `
           <div class="card-nocturne rounded-3xl p-10 sm:p-14 text-center space-y-4">
             <p class="font-serif-jp text-lg sm:text-xl text-[#f0d78c]">現在登録されているキャストはいません</p>
-            <p class="text-xs sm:text-sm text-[#b5ae9e]">管理者ログイン後、管理画面からキャスト（画像・自己紹介文・接客スタイル）を新規登録・編集できます。</p>
+            <p class="text-xs sm:text-sm text-[#b5ae9e]">管理者ログイン後、管理画面からキャスト（キャスト名・カテゴリー・演者名・Xリンク・一言セリフ・画像・自己紹介文）を新規登録できます。</p>
             <div class="pt-2">
               <button id="emptyStateRegisterCastBtn" type="button" class="px-6 py-3 rounded-xl bg-gradient-to-r from-[#b89028] via-[#d4af37] to-[#b89028] text-[#09090d] font-bold text-xs sm:text-sm hover:brightness-110 transition shadow-lg">
                 ${state.isAdminAuthenticated ? "＋ 新規キャストを登録する" : "🔒 管理者ログインしてキャストを登録する"}
@@ -1714,6 +1892,7 @@
           const editBtnHtml = state.isAdminAuthenticated
             ? `<button type="button" data-edit-cast="${escapeHtml(c.id)}" class="card-edit-cast-btn px-3 py-2 rounded-xl bg-[#181828] hover:bg-[#25253c] text-[#f0d78c] border border-[#d4af37]/40 text-xs font-semibold transition shrink-0">✎ 編集</button>`
             : "";
+          const xIconHtml = buildXIconLinkHtml(c.xUrl);
           const imgBlockHtml = c.image
             ? `<div class="mb-4 overflow-hidden rounded-2xl border border-[#d4af37]/30 bg-[#07070c]">
                  <img src="${escapeHtml(c.image)}" alt="${escapeHtml(c.name)}" class="w-full h-64 object-cover max-w-full group-hover:scale-[1.02] transition duration-300">
@@ -1724,7 +1903,7 @@
                      data-open-cast="${escapeHtml(c.id)}">
               <div class="space-y-4">
                 ${imgBlockHtml}
-                <!-- Top Header: Entry No + Faction Badge + Actor -->
+                <!-- Top Header: Entry No + Faction Badge + Actor + X Icon Only -->
                 <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#d4af37]/15">
                   <div class="flex items-center gap-2">
                     <span class="font-display text-xs font-bold px-2.5 py-0.5 rounded-md bg-[#181826] text-[#d4af37] border border-[#d4af37]/30">
@@ -1732,41 +1911,35 @@
                     </span>
                     <span class="px-3 py-0.5 rounded-full text-xs font-semibold border"
                           style="color:${escapeHtml(f.color)}; background:${escapeHtml(f.badgeBg)}; border-color:${escapeHtml(f.badgeBorder)};">
-                      ${escapeHtml(c.rawFaction)}
+                      ${escapeHtml(f.name)}
                     </span>
                   </div>
-                  <span class="text-xs text-[#c7bfa8]">
-                    演者：<strong class="text-[#f0d78c]">${escapeHtml(c.actor)}</strong>
-                  </span>
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs text-[#c7bfa8]">
+                      演者：<strong class="text-[#f0d78c]">${escapeHtml(c.actor)}</strong>
+                    </span>
+                    ${xIconHtml}
+                  </div>
                 </div>
 
-                <!-- Character Name & Subtitle -->
+                <!-- Character Name -->
                 <div>
                   <h3 class="font-serif-jp text-xl sm:text-2xl font-bold text-[#f7f2e6] group-hover:text-[#f0d78c] transition leading-snug">
                     ${escapeHtml(c.name)}
                   </h3>
-                  ${c.subName ? `<p class="text-xs text-[#d4af37] font-serif-jp mt-1">${escapeHtml(c.subName)}</p>` : ""}
                 </div>
 
                 <!-- Signature Quote -->
                 <blockquote class="p-4 rounded-2xl bg-[#090910] border-l-2 border-[#d4af37] font-serif-jp text-xs sm:text-sm text-[#f5efe2] leading-relaxed line-clamp-3">
                   ${escapeHtml(c.quote)}
                 </blockquote>
-
-                <!-- Clean Service Style Preview (NG Removed) -->
-                <div class="text-xs pt-1">
-                  <div class="p-3.5 rounded-2xl bg-[#10101a] border border-[#d4af37]/15">
-                    <span class="text-[#f0d78c] font-semibold block mb-1">✦ 接客スタイル</span>
-                    <p class="text-[#d8d0c0] line-clamp-2 leading-relaxed">${escapeHtml(c.serviceStyle)}</p>
-                  </div>
-                </div>
               </div>
 
               <!-- Card Footer CTA -->
               <div class="pt-5 mt-5 border-t border-[#d4af37]/15 flex items-center gap-2">
                 <button type="button" data-open-cast="${escapeHtml(c.id)}"
                         class="flex-1 py-2.5 px-4 rounded-xl bg-[#d4af37]/15 group-hover:bg-[#d4af37] text-[#f0d78c] group-hover:text-[#09090d] border border-[#d4af37]/40 font-semibold text-xs sm:text-sm transition flex items-center justify-center gap-2">
-                  <span>RP自己紹介（全文）・詳細を読む</span>
+                  <span>自己紹介文を読む</span>
                   <span>→</span>
                 </button>
                 ${editBtnHtml}
@@ -1781,6 +1954,7 @@
           const editBtnHtml = state.isAdminAuthenticated
             ? `<button type="button" data-edit-cast="${escapeHtml(c.id)}" class="card-edit-cast-btn px-3.5 py-1.5 rounded-xl bg-[#d4af37] text-[#09090d] text-xs font-bold">✎ 編集する</button>`
             : "";
+          const xIconHtml = buildXIconLinkHtml(c.xUrl);
           const listImgHtml = c.image
             ? `<div class="my-4"><img src="${escapeHtml(c.image)}" alt="${escapeHtml(c.name)}" class="max-h-80 w-auto max-w-full rounded-2xl border border-[#d4af37]/30 object-contain"></div>`
             : "";
@@ -1793,11 +1967,12 @@
                   </span>
                   <span class="px-3.5 py-1 rounded-full text-xs font-semibold border"
                         style="color:${escapeHtml(f.color)}; background:${escapeHtml(f.badgeBg)}; border-color:${escapeHtml(f.badgeBorder)};">
-                    ${escapeHtml(c.rawFaction)}
+                    ${escapeHtml(f.name)}
                   </span>
                   <span class="text-xs text-[#ece6d9]">
                     演者：<strong class="text-[#f0d78c]">${escapeHtml(c.actor)}</strong>
                   </span>
+                  ${xIconHtml}
                 </div>
                 <div class="flex items-center gap-2">
                   ${editBtnHtml}
@@ -1811,17 +1986,15 @@
                 <h3 class="font-serif-jp text-2xl sm:text-3xl font-bold text-[#f7f2e6]">
                   ${escapeHtml(c.name)}
                 </h3>
-                ${c.subName ? `<p class="text-xs sm:text-sm text-[#d4af37] font-serif-jp mt-1">${escapeHtml(c.subName)}</p>` : ""}
                 ${listImgHtml}
               </div>
 
-              <div class="p-4 rounded-2xl bg-[#12121c] border border-[#d4af37]/20 text-xs sm:text-sm">
-                <div class="font-semibold text-[#f0d78c] mb-1">✦ 接客スタイル</div>
-                <p class="text-[#d8d0c0] leading-relaxed whitespace-pre-line">${escapeHtml(c.serviceStyle)}</p>
-              </div>
+              <blockquote class="p-4 rounded-2xl bg-[#090910] border-l-2 border-[#d4af37] font-serif-jp text-sm text-[#f5efe2] leading-relaxed">
+                ${escapeHtml(c.quote)}
+              </blockquote>
 
               <div class="p-6 sm:p-8 rounded-2xl bg-[#08080d] border border-[#d4af37]/25">
-                <div class="text-xs font-serif-jp font-semibold text-[#d4af37] mb-3">ＲＰ自己紹介</div>
+                <div class="text-xs font-serif-jp font-semibold text-[#d4af37] mb-3">自己紹介文</div>
                 <div class="reading-prose">
                   ${(c.story || []).map(p => `<p>${escapeHtml(p)}</p>`).join("")}
                 </div>
@@ -1830,6 +2003,12 @@
           `;
         }).join("");
       }
+
+      container.querySelectorAll(".cast-x-icon-link").forEach(link => {
+        link.addEventListener("click", (e) => {
+          e.stopPropagation();
+        });
+      });
 
       container.querySelectorAll("[data-open-cast]").forEach(el => {
         el.addEventListener("click", (e) => {
@@ -1875,11 +2054,14 @@
       const renderCell = (list, color) => {
         if (!list || list.length === 0) return `<span class="text-[#595347]">—</span>`;
         return `<div class="flex flex-wrap gap-1.5">` + list.map(c => `
-          <button type="button" data-open-cast="${escapeHtml(c.id)}"
-                  class="actor-table-cast-btn px-2.5 py-1 rounded-lg bg-[#141422] hover:bg-[#d4af37]/20 border border-[#d4af37]/30 text-xs text-left transition">
-            <span class="text-[10px] text-[#9c9480] mr-1">No.${String(c.no).padStart(2, "0")}</span>
-            <span class="font-serif-jp font-semibold" style="color:${color}">${escapeHtml(c.name)}</span>
-          </button>
+          <div class="inline-flex items-center gap-1">
+            <button type="button" data-open-cast="${escapeHtml(c.id)}"
+                    class="actor-table-cast-btn px-2.5 py-1 rounded-lg bg-[#141422] hover:bg-[#d4af37]/20 border border-[#d4af37]/30 text-xs text-left transition">
+              <span class="text-[10px] text-[#9c9480] mr-1">No.${String(c.no).padStart(2, "0")}</span>
+              <span class="font-serif-jp font-semibold" style="color:${color}">${escapeHtml(c.name)}</span>
+            </button>
+            ${c.xUrl ? buildXIconLinkHtml(c.xUrl, "!w-6 !h-6") : ""}
+          </div>
         `).join("") + `</div>`;
       };
 
@@ -1900,7 +2082,7 @@
     }
 
     // ---------------------------------------------------------
-    // Cast Detail Modal (Supports Portrait Image + NG Removed)
+    // Cast Detail Modal (Supports Portrait Image + X Icon)
     // ---------------------------------------------------------
     function openCastModal(castId) {
       const cast = state.casts.find(c => c.id === castId);
@@ -1909,10 +2091,15 @@
 
       const f = state.config.factions[cast.factionId] || state.config.factions.faction_c;
       const badgeEl = document.getElementById("modalCastFactionBadge");
-      badgeEl.textContent = `No.${String(cast.no).padStart(2, "0")}｜${cast.rawFaction}`;
+      badgeEl.textContent = `No.${String(cast.no).padStart(2, "0")}｜${f.name}`;
       badgeEl.style.color = f.color;
       badgeEl.style.backgroundColor = f.badgeBg;
       badgeEl.style.borderColor = f.badgeBorder;
+
+      const xWrap = document.getElementById("modalCastXLinkWrap");
+      if (xWrap) {
+        xWrap.innerHTML = buildXIconLinkHtml(cast.xUrl);
+      }
 
       const imgWrap = document.getElementById("modalCastImageWrap");
       const imgEl = document.getElementById("modalCastImage");
@@ -1924,15 +2111,13 @@
         imgWrap.classList.add("hidden");
       }
 
-      document.getElementById("modalCastTitle").textContent = `演者：${cast.actor}` + (cast.subName ? ` ／ ${cast.subName}` : "");
+      document.getElementById("modalCastTitle").textContent = `演者：${cast.actor}`;
       document.getElementById("modalCastName").textContent = cast.name;
       document.getElementById("modalCastQuote").textContent = cast.quote;
 
       document.getElementById("modalCastStory").innerHTML = (cast.story || []).map(p =>
         `<p>${escapeHtml(p)}</p>`
       ).join("");
-
-      document.getElementById("modalCastServiceStyle").textContent = cast.serviceStyle || "";
 
       const modal = document.getElementById("castDetailModal");
       modal.classList.remove("hidden");
@@ -1955,7 +2140,7 @@
     }
 
     // ---------------------------------------------------------
-    // Reports / Archive
+    // Reports / Archive (Empty State + Images + Direct Share Link & X Post)
     // ---------------------------------------------------------
     function populateReportCastFilter() {
       const select = document.getElementById("reportCastFilterSelect");
@@ -1968,17 +2153,55 @@
       select.value = castNames.has(currentVal) ? currentVal : "ALL";
     }
 
+    function openLightbox(imgSrc, titleText) {
+      const modal = document.getElementById("galleryLightboxModal");
+      const img = document.getElementById("lightboxImage");
+      const title = document.getElementById("lightboxReportTitle");
+      if (img) img.src = imgSrc;
+      if (title) title.textContent = titleText || "営業記録 画像プレビュー";
+      if (modal) modal.classList.remove("hidden");
+    }
+
+    function closeLightbox() {
+      document.getElementById("galleryLightboxModal").classList.add("hidden");
+    }
+
     function renderReports() {
       populateReportCastFilter();
       const container = document.getElementById("reportsContainer");
+
+      if (state.reports.length === 0) {
+        container.innerHTML = `
+          <div class="card-nocturne rounded-3xl p-10 sm:p-14 text-center space-y-4">
+            <p class="font-serif-jp text-lg sm:text-xl text-[#f0d78c]">現在投稿されている営業記録はありません</p>
+            <p class="text-xs sm:text-sm text-[#b5ae9e]">管理者ログイン後、管理画面から営業記録（写真・参加キャスト選択・本文）を投稿するとここに一覧表示され、公式X告知用の専用リンクも発行されます。</p>
+            <div class="pt-2">
+              <button id="emptyStatePostReportBtn" type="button" class="px-6 py-3 rounded-xl bg-gradient-to-r from-[#b89028] via-[#d4af37] to-[#b89028] text-[#09090d] font-bold text-xs sm:text-sm hover:brightness-110 transition shadow-lg">
+                ${state.isAdminAuthenticated ? "＋ 新しい営業記録を投稿する" : "🔒 管理者ログインして営業記録を投稿する"}
+              </button>
+            </div>
+          </div>
+        `;
+        const empRepBtn = document.getElementById("emptyStatePostReportBtn");
+        if (empRepBtn) {
+          empRepBtn.addEventListener("click", () => {
+            state.editingReportId = "NEW";
+            openAdminModal("tab-add-report");
+            loadReportIntoEditor("NEW");
+          });
+        }
+        return;
+      }
+
       const filtered = state.reports.filter(r => {
         if (state.selectedReportCast === "ALL") return true;
         return (r.casts || []).includes(state.selectedReportCast);
       });
 
       container.innerHTML = filtered.map(r => {
+        const isHighlighted = state.highlightedReportId === r.id;
         const editRepBtn = state.isAdminAuthenticated
-          ? `<button type="button" data-edit-report="${escapeHtml(r.id)}" class="edit-report-card-btn px-3 py-1 rounded-lg bg-[#d4af37] text-[#09090d] text-xs font-bold">✎ 編集する</button>`
+          ? `<button type="button" data-edit-report="${escapeHtml(r.id)}" class="edit-report-card-btn px-3.5 py-1.5 rounded-xl bg-[#d4af37] text-[#09090d] text-xs font-bold hover:brightness-110 transition">✎ 編集する</button>`
           : "";
         const castsRowHtml = (r.casts && r.casts.length > 0)
           ? `<div class="flex flex-wrap items-center gap-2 pt-1">
@@ -1988,22 +2211,52 @@
                  if (matchedCast) {
                    return `<button type="button" data-open-cast="${escapeHtml(matchedCast.id)}" class="report-cast-chip px-3 py-1 rounded-full bg-[#151522] hover:bg-[#d4af37]/25 text-xs text-[#f0d78c] border border-[#d4af37]/40 transition">✦ ${escapeHtml(cName)}</button>`;
                  }
-                 return `<span class="px-3 py-1 rounded-full bg-[#151522] text-xs text-[#d8d0c0] border border-[#d4af37]/20">${escapeHtml(cName)}</span>`;
+                 return `<span class="px-3 py-1 rounded-full bg-[#151522] text-xs text-[#d8d0c0] border border-[#d4af37]/20">✦ ${escapeHtml(cName)}</span>`;
                }).join("")}
              </div>`
           : "";
+
+        const imagesList = Array.isArray(r.images) ? r.images : [];
+        let imagesHtml = "";
+        if (imagesList.length === 1) {
+          imagesHtml = `
+            <div class="pt-2">
+              <img src="${escapeHtml(imagesList[0])}" alt="${escapeHtml(r.title)}" data-lightbox-src="${escapeHtml(imagesList[0])}" data-lightbox-title="${escapeHtml(r.title)}"
+                   class="report-photo-thumb max-h-[460px] w-auto max-w-full rounded-2xl border border-[#d4af37]/35 object-contain mx-auto cursor-pointer hover:brightness-105 transition">
+            </div>
+          `;
+        } else if (imagesList.length > 1) {
+          imagesHtml = `
+            <div class="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              ${imagesList.map((imgSrc, i) => `
+                <div class="rounded-2xl overflow-hidden border border-[#d4af37]/35 bg-[#07070c]">
+                  <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(r.title)} (${i + 1})" data-lightbox-src="${escapeHtml(imgSrc)}" data-lightbox-title="${escapeHtml(r.title)}"
+                       class="report-photo-thumb w-full h-64 object-cover cursor-pointer hover:scale-[1.01] transition">
+                </div>
+              `).join("")}
+            </div>
+          `;
+        }
+
+        const xIntentUrl = buildReportXIntentUrl(r);
+
         return `
-          <article class="card-nocturne rounded-3xl p-6 sm:p-8 lg:p-10 border border-[#d4af37]/30 space-y-5">
+          <article id="report-${escapeHtml(r.id)}" class="card-nocturne rounded-3xl p-6 sm:p-8 lg:p-10 border border-[#d4af37]/30 space-y-5 ${isHighlighted ? "report-highlight-ring" : ""}">
             <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#d4af37]/20 pb-4">
               <div class="flex flex-wrap items-center gap-2.5">
-                <time class="font-display text-sm sm:text-base font-bold text-[#f0d78c] px-3 py-1 rounded-lg bg-[#d4af37]/15 border border-[#d4af37]/35">
+                <time class="font-display text-sm sm:text-base font-bold text-[#f0d78c] px-3.5 py-1 rounded-lg bg-[#d4af37]/15 border border-[#d4af37]/35">
                   ${escapeHtml(r.date)}
                 </time>
-                <span class="px-3 py-1 rounded-full text-xs bg-[#161622] text-[#ece6d9] border border-[#d4af37]/25">
-                  ${escapeHtml(r.category || "営業レポート")}
-                </span>
               </div>
-              <div class="flex items-center gap-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <button type="button" data-copy-report-link="${escapeHtml(r.id)}" class="copy-report-link-btn px-3 py-1.5 rounded-xl bg-[#161624] hover:bg-[#222236] border border-[#d4af37]/35 text-xs text-[#f0d78c] transition inline-flex items-center gap-1.5">
+                  <span>🔗</span>
+                  <span class="copy-report-link-label">この記録のリンクをコピー</span>
+                </button>
+                <a href="${escapeHtml(xIntentUrl)}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-xl bg-[#141422] hover:bg-[#d4af37] text-[#f0d78c] hover:text-[#09090d] border border-[#d4af37]/40 text-xs font-semibold transition inline-flex items-center gap-1.5">
+                  <span>𝕏</span>
+                  <span>Xで告知ポスト</span>
+                </a>
                 ${editRepBtn}
               </div>
             </div>
@@ -2014,6 +2267,8 @@
               </h3>
               ${castsRowHtml}
             </div>
+
+            ${imagesHtml}
 
             <div class="reading-prose bg-[#09090f] p-5 sm:p-7 rounded-2xl border border-[#d4af37]/20">
               ${(r.body || []).map(p => `<p>${escapeHtml(p)}</p>`).join("")}
@@ -2028,15 +2283,33 @@
         });
       });
 
+      container.querySelectorAll(".report-photo-thumb").forEach(img => {
+        img.addEventListener("click", () => {
+          openLightbox(img.getAttribute("data-lightbox-src"), img.getAttribute("data-lightbox-title"));
+        });
+      });
+
+      container.querySelectorAll(".copy-report-link-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const repId = btn.getAttribute("data-copy-report-link");
+          const url = getReportShareUrl(repId);
+          copyTextToClipboard(url, () => {
+            const lbl = btn.querySelector(".copy-report-link-label");
+            if (lbl) {
+              lbl.textContent = "✓ リンクをコピーしました！";
+              setTimeout(() => {
+                lbl.textContent = "この記録のリンクをコピー";
+              }, 2400);
+            }
+          });
+        });
+      });
+
       container.querySelectorAll(".edit-report-card-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           openReportEditorFor(btn.getAttribute("data-edit-report"));
         });
       });
-    }
-
-    function closeLightbox() {
-      document.getElementById("galleryLightboxModal").classList.add("hidden");
     }
 
     // ---------------------------------------------------------
@@ -2064,6 +2337,45 @@
       });
     }
 
+    // Render checkboxes for participating casts inside Admin Report Editor (auto-populated from state.casts)
+    function renderReportCastCheckboxes(selectedCastNames) {
+      const container = document.getElementById("reportCastCheckboxesContainer");
+      if (!container) return;
+      const selectedSet = new Set(Array.isArray(selectedCastNames) ? selectedCastNames : []);
+
+      if (state.casts.length === 0) {
+        container.innerHTML = `
+          <div class="p-3.5 rounded-xl bg-[#12121e] border border-[#d4af37]/20 text-xs text-[#9c9480]">
+            現在キャスト一覧に登録されている人がいません。「1. キャスト編集・新規登録」でキャストを登録すると、ここに自動でチェックボックスが追加されます。
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 max-h-52 overflow-y-auto p-1">
+          ${state.casts.map(c => {
+            const f = state.config.factions[c.factionId] || state.config.factions.faction_c;
+            const checked = selectedSet.has(c.name) ? "checked" : "";
+            return `
+              <label class="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[#141422] hover:bg-[#1c1c30] border border-[#d4af37]/25 cursor-pointer select-none transition">
+                <input type="checkbox" value="${escapeHtml(c.name)}" class="report-cast-checkbox w-4 h-4 accent-[#d4af37] rounded" ${checked}>
+                <span class="text-[10px] px-2 py-0.5 rounded-full border shrink-0" style="color:${escapeHtml(f.color)}; background:${escapeHtml(f.badgeBg)}; border-color:${escapeHtml(f.badgeBorder)};">
+                  ${escapeHtml(f.name)}
+                </span>
+                <span class="text-xs font-serif-jp font-semibold text-[#f5efe2] truncate">${escapeHtml(c.name)}</span>
+              </label>
+            `;
+          }).join("")}
+        </div>
+      `;
+    }
+
+    function getCheckedReportCastNames() {
+      const boxes = document.querySelectorAll(".report-cast-checkbox:checked");
+      return Array.from(boxes).map(cb => cb.value).filter(Boolean);
+    }
+
     function renderAdminRegisteredCastsList() {
       const listEl = document.getElementById("adminRegisteredCastsList");
       if (!listEl) return;
@@ -2073,6 +2385,7 @@
       }
       listEl.innerHTML = state.casts.map(c => {
         const isEditing = state.editingCastId === c.id;
+        const f = state.config.factions[c.factionId] || state.config.factions.faction_c;
         const thumbHtml = c.image
           ? `<img src="${escapeHtml(c.image)}" alt="" class="w-8 h-8 rounded-lg object-cover border border-[#d4af37]/40 shrink-0">`
           : `<span class="w-8 h-8 rounded-lg bg-[#0d0d14] border border-[#d4af37]/20 flex items-center justify-center text-[10px] text-[#787163] shrink-0">無</span>`;
@@ -2083,7 +2396,7 @@
               <div class="truncate">
                 <span class="font-display text-[#d4af37] font-bold mr-1.5">No.${String(c.no).padStart(2, "0")}</span>
                 <strong class="text-[#f7f2e6] font-serif-jp">${escapeHtml(c.name)}</strong>
-                <span class="text-[#9c9480] ml-2">（演者：${escapeHtml(c.actor)} ／ ${escapeHtml(c.rawFaction)}）</span>
+                <span class="text-[#9c9480] ml-2">（演者：${escapeHtml(c.actor)} ／ ${escapeHtml(f.name)}）</span>
               </div>
             </div>
             <div class="flex items-center gap-1.5 shrink-0">
@@ -2120,6 +2433,7 @@
           renderCastFilterTabs();
           renderCasts();
           renderActorCrossTable();
+          renderReportCastCheckboxes(getCheckedReportCastNames());
           updateAdminPreviews();
           loadCastIntoEditor(state.editingCastId);
           showGlobalAdminFeedback(`✓ キャスト「${removedName}」を削除しました。`);
@@ -2132,7 +2446,7 @@
       if (!sel) return;
       const current = state.editingCastId || "NEW";
       sel.innerHTML = `<option value="NEW">＋ 新規キャストとして登録する</option>` +
-        state.casts.map(c => `<option value="${escapeHtml(c.id)}">No.${String(c.no).padStart(2, "0")}｜${escapeHtml(c.name)}（演者：${escapeHtml(c.actor)}／${escapeHtml(c.rawFaction)}）</option>`).join("");
+        state.casts.map(c => `<option value="${escapeHtml(c.id)}">No.${String(c.no).padStart(2, "0")}｜${escapeHtml(c.name)}（演者：${escapeHtml(c.actor)}）</option>`).join("");
       sel.value = (current === "NEW" || state.casts.some(c => c.id === current)) ? current : "NEW";
       renderAdminRegisteredCastsList();
     }
@@ -2145,17 +2459,16 @@
       const modeBadge = document.getElementById("castFormModeBadge");
       const fileInput = document.getElementById("newCastImageFile");
       const urlInput = document.getElementById("newCastImageUrl");
+      const xUrlInput = document.getElementById("newCastXUrl");
       if (fileInput) fileInput.value = "";
 
       if (state.editingCastId === "NEW") {
         document.getElementById("newCastName").value = "";
-        document.getElementById("newCastSubName").value = "";
         document.getElementById("newCastFaction").value = "faction_a";
-        document.getElementById("newCastRawFaction").value = "";
         document.getElementById("newCastTitle").value = "";
         document.getElementById("newCastQuote").value = "";
-        document.getElementById("newCastService").value = "";
         document.getElementById("newCastStory").value = "";
+        if (xUrlInput) xUrlInput.value = "";
         if (urlInput) urlInput.value = "";
         updateCastImagePreviewUi("");
         if (saveLabel) saveLabel.textContent = "＋ 新規キャストとして登録・反映する";
@@ -2170,13 +2483,11 @@
       const c = state.casts.find(item => item.id === state.editingCastId);
       if (!c) return;
       document.getElementById("newCastName").value = c.name || "";
-      document.getElementById("newCastSubName").value = c.subName || "";
       document.getElementById("newCastFaction").value = c.factionId || "faction_a";
-      document.getElementById("newCastRawFaction").value = c.rawFaction || "";
       document.getElementById("newCastTitle").value = c.actor || "";
       document.getElementById("newCastQuote").value = c.quote || "";
-      document.getElementById("newCastService").value = c.serviceStyle || "";
       document.getElementById("newCastStory").value = (c.story || []).join("\n\n");
+      if (xUrlInput) xUrlInput.value = c.xUrl || "";
       if (urlInput) {
         urlInput.value = (c.image && !c.image.startsWith("data:")) ? c.image : "";
       }
@@ -2200,6 +2511,73 @@
       loadCastIntoEditor(castId);
     }
 
+    function updateAdminReportShareBox(report) {
+      const box = document.getElementById("adminReportShareBox");
+      const linkInput = document.getElementById("adminReportDirectLinkInput");
+      const xBtn = document.getElementById("postAdminReportToXBtn");
+      if (!box) return;
+      if (!report) {
+        box.classList.add("hidden");
+        return;
+      }
+      box.classList.remove("hidden");
+      const shareUrl = getReportShareUrl(report.id);
+      if (linkInput) linkInput.value = shareUrl;
+      if (xBtn) xBtn.href = buildReportXIntentUrl(report);
+    }
+
+    function renderAdminRegisteredReportsList() {
+      const listEl = document.getElementById("adminRegisteredReportsList");
+      if (!listEl) return;
+      if (state.reports.length === 0) {
+        listEl.innerHTML = `<div class="text-xs text-[#787163] py-2">まだ投稿されている営業記録はありません。下のフォームから投稿するとここに一覧表示されます。</div>`;
+        return;
+      }
+      listEl.innerHTML = state.reports.map(r => {
+        const isEditing = state.editingReportId === r.id;
+        const imgCount = Array.isArray(r.images) ? r.images.length : 0;
+        return `
+          <div class="flex items-center justify-between gap-2 px-3.5 py-2 rounded-xl border ${isEditing ? "bg-[#d4af37]/20 border-[#d4af37]" : "bg-[#141422] border-[#d4af37]/25"}">
+            <div class="text-xs truncate">
+              <span class="font-display text-[#f0d78c] font-bold mr-2">${escapeHtml(r.date)}</span>
+              <strong class="text-[#f7f2e6] font-serif-jp">${escapeHtml(r.title)}</strong>
+              <span class="text-[#9c9480] ml-2">（参加：${(r.casts || []).length}名 ／ 画像：${imgCount}枚）</span>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button type="button" data-admin-pick-report="${escapeHtml(r.id)}" class="admin-pick-report-btn px-3 py-1 rounded-lg bg-[#d4af37] text-[#09090d] font-bold text-xs hover:brightness-110 transition">
+                ✎ 編集・リンク
+              </button>
+              <button type="button" data-admin-del-report="${escapeHtml(r.id)}" class="admin-del-report-btn px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/35 text-rose-200 border border-rose-400/35 text-xs transition">
+                削除
+              </button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      listEl.querySelectorAll(".admin-pick-report-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          loadReportIntoEditor(btn.getAttribute("data-admin-pick-report"));
+        });
+      });
+
+      listEl.querySelectorAll(".admin-del-report-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const targetId = btn.getAttribute("data-admin-del-report");
+          const idx = state.reports.findIndex(r => r.id === targetId);
+          if (idx === -1) return;
+          const removedTitle = state.reports[idx].title;
+          state.reports.splice(idx, 1);
+          if (state.editingReportId === targetId) state.editingReportId = "NEW";
+          saveStateToStorage();
+          renderReports();
+          updateAdminPreviews();
+          loadReportIntoEditor(state.editingReportId);
+          showGlobalAdminFeedback(`✓ 営業記録「${removedTitle}」を削除しました。`);
+        });
+      });
+    }
+
     function populateAdminReportSelector() {
       const sel = document.getElementById("adminReportEditSelector");
       if (!sel) return;
@@ -2207,6 +2585,7 @@
       sel.innerHTML = `<option value="NEW">＋ 新しい営業記録を投稿する</option>` +
         state.reports.map(r => `<option value="${escapeHtml(r.id)}">${escapeHtml(r.date)}｜${escapeHtml(r.title)}</option>`).join("");
       sel.value = (current === "NEW" || state.reports.some(r => r.id === current)) ? current : "NEW";
+      renderAdminRegisteredReportsList();
     }
 
     function loadReportIntoEditor(reportId) {
@@ -2214,6 +2593,11 @@
       populateAdminReportSelector();
       const saveLabel = document.getElementById("saveReportBtnLabel");
       const delBtn = document.getElementById("deleteSelectedReportBtn");
+      const modeBadge = document.getElementById("reportFormModeBadge");
+      const filesInput = document.getElementById("newReportImageFiles");
+      const urlInput = document.getElementById("newReportImageUrl");
+      if (filesInput) filesInput.value = "";
+      if (urlInput) urlInput.value = "";
 
       if (state.editingReportId === "NEW") {
         const today = new Date();
@@ -2221,11 +2605,17 @@
         const mm = String(today.getMonth() + 1).padStart(2, "0");
         const dd = String(today.getDate()).padStart(2, "0");
         document.getElementById("newReportDate").value = `${yyyy}.${mm}.${dd}`;
-        document.getElementById("newReportCategory").value = "通常営業レポート";
         document.getElementById("newReportTitle").value = "";
-        document.getElementById("newReportCasts").value = "";
         document.getElementById("newReportBody").value = "";
+        state.editingReportImages = [];
+        updateReportImagesPreviewUi();
+        renderReportCastCheckboxes([]);
+        updateAdminReportShareBox(null);
         if (saveLabel) saveLabel.textContent = "＋ 新しい営業記録を投稿する";
+        if (modeBadge) {
+          modeBadge.textContent = "＋ 新規営業記録 投稿モード";
+          modeBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-[#d4af37]/20 text-[#f0d78c] border border-[#d4af37]/40";
+        }
         if (delBtn) delBtn.classList.add("hidden");
         return;
       }
@@ -2233,11 +2623,17 @@
       const r = state.reports.find(item => item.id === state.editingReportId);
       if (!r) return;
       document.getElementById("newReportDate").value = r.date || "";
-      document.getElementById("newReportCategory").value = r.category || "通常営業レポート";
       document.getElementById("newReportTitle").value = r.title || "";
-      document.getElementById("newReportCasts").value = (r.casts || []).join(", ");
       document.getElementById("newReportBody").value = (r.body || []).join("\n\n");
-      if (saveLabel) saveLabel.textContent = `✓「${r.title}」の修正を保存する`;
+      state.editingReportImages = Array.isArray(r.images) ? [...r.images] : [];
+      updateReportImagesPreviewUi();
+      renderReportCastCheckboxes(r.casts || []);
+      updateAdminReportShareBox(r);
+      if (saveLabel) saveLabel.textContent = `✓「${r.title}」の修正を上書き保存する`;
+      if (modeBadge) {
+        modeBadge.textContent = `✎ 編集中：${r.date}「${r.title}」`;
+        modeBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-200 border border-emerald-400/40";
+      }
       if (delBtn) delBtn.classList.remove("hidden");
     }
 
@@ -2257,13 +2653,12 @@
       populateAdminCastSelector();
       populateAdminReportSelector();
 
-      const sampleReport = state.reports[0] || { id: "report", date: "2026.10.25", title: "営業記録", category: "通常営業レポート", casts: [], body: [] };
+      const sampleReport = state.reports[0] || { id: "report", date: "2026.10.25", title: "営業記録", casts: [], body: [] };
       const mdText = [
         "---",
         `id: ${sampleReport.id}`,
         `date: ${sampleReport.date}`,
         `title: ${sampleReport.title}`,
-        `category: ${sampleReport.category}`,
         "casts:",
         ...(sampleReport.casts || []).map(c => `  - ${c}`),
         "---",
@@ -2339,6 +2734,7 @@
         return;
       }
       updateAdminPreviews();
+      renderReportCastCheckboxes(getCheckedReportCastNames());
       document.getElementById("adminDataModal").classList.remove("hidden");
       if (defaultTabId) switchAdminTab(defaultTabId);
     }
@@ -2357,6 +2753,31 @@
           ? "admin-tab-btn px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold bg-[#d4af37] text-[#09090d]"
           : "admin-tab-btn px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-medium bg-[#161622] text-[#ece6d9] hover:text-[#f0d78c]";
       });
+      if (tabId === "tab-add-report") {
+        const currentReport = state.reports.find(r => r.id === state.editingReportId);
+        renderReportCastCheckboxes(currentReport ? currentReport.casts : getCheckedReportCastNames());
+      }
+    }
+
+    function checkDeepLinkedReport() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        let targetReportId = params.get("report");
+        if (!targetReportId && window.location.hash.startsWith("#report-")) {
+          targetReportId = decodeURIComponent(window.location.hash.replace(/^#report-/, ""));
+        }
+        if (!targetReportId) return;
+        const exists = state.reports.some(r => r.id === targetReportId);
+        if (!exists) return;
+        state.selectedReportCast = "ALL";
+        state.highlightedReportId = targetReportId;
+        navigateToPageRoute("archive");
+        renderReports();
+        setTimeout(() => {
+          const el = document.getElementById("report-" + targetReportId);
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 120);
+      } catch (e) {}
     }
 
     function initApp() {
@@ -2369,10 +2790,13 @@
       renderCasts();
       renderActorCrossTable();
       renderReports();
+      renderReportCastCheckboxes([]);
 
       if (state.pageMode === "faction_page" && state.selectedFaction !== "ALL") {
         navigateToPageRoute(state.selectedFaction);
       }
+
+      checkDeepLinkedReport();
 
       document.querySelectorAll(".page-route-btn").forEach(btn => {
         btn.addEventListener("click", () => {
@@ -2400,20 +2824,6 @@
 
       document.getElementById("mobileMenuBtn").addEventListener("click", () => {
         document.getElementById("mobileMenuPanel").classList.toggle("hidden");
-      });
-
-      document.querySelectorAll(".sub-faction-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          state.selectedSubFaction = btn.getAttribute("data-sub-faction");
-          state.currentPage = 1;
-          document.querySelectorAll(".sub-faction-btn").forEach(b => {
-            const isAct = b.getAttribute("data-sub-faction") === state.selectedSubFaction;
-            b.className = isAct
-              ? "sub-faction-btn px-3 py-1 rounded-lg bg-[#7dd3fc]/20 text-[#7dd3fc] border border-[#7dd3fc]/40 font-semibold"
-              : "sub-faction-btn px-3 py-1 rounded-lg bg-[#12121c] text-[#c7bfa8] border border-[#d4af37]/20";
-          });
-          renderCasts();
-        });
       });
 
       document.getElementById("actorFilterSelect").addEventListener("change", (e) => {
@@ -2480,6 +2890,9 @@
       });
 
       document.getElementById("closeLightboxBtn").addEventListener("click", closeLightbox);
+      document.getElementById("galleryLightboxModal").addEventListener("click", (e) => {
+        if (e.target.id === "galleryLightboxModal") closeLightbox();
+      });
 
       document.getElementById("reportCastFilterSelect").addEventListener("change", (e) => {
         state.selectedReportCast = e.target.value;
@@ -2567,22 +2980,20 @@
         updateCastImagePreviewUi("");
       });
 
-      // Save or Register Cast (with Image support, NG field omitted)
+      // Save or Register Cast (Streamlined fields + X link + auto-syncs to Report Cast Checkboxes)
       document.getElementById("addCastPreviewBtn").addEventListener("click", () => {
         const name = document.getElementById("newCastName").value.trim();
         if (!name) {
           document.getElementById("addCastFeedback").textContent = "※キャスト名を入力してください";
           return;
         }
-        const subName = document.getElementById("newCastSubName").value.trim();
         const factionId = document.getElementById("newCastFaction").value;
         const actorRaw = document.getElementById("newCastTitle").value.trim() || "未設定";
         const actor = actorRaw.replace(/^演者[：:]/, "").trim();
         const fName = state.config.factions[factionId]?.name || "中立";
-        const rawFaction = document.getElementById("newCastRawFaction").value.trim() || fName;
         const quote = document.getElementById("newCastQuote").value.trim() || "「今宵も良き物語を紡ぎましょう。」";
+        const xUrl = normalizeXUrl(document.getElementById("newCastXUrl").value.trim());
         const storyRaw = document.getElementById("newCastStory").value.trim() || "魔法少女と悪のノクターンサロン Rivelliaに集ったキャスト。";
-        const service = document.getElementById("newCastService").value.trim() || "雑談・ロールプレイ";
         const imageVal = state.editingCastImageData || document.getElementById("newCastImageUrl").value.trim() || "";
 
         const paragraphs = storyRaw.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
@@ -2590,19 +3001,26 @@
         if (state.editingCastId && state.editingCastId !== "NEW") {
           const target = state.casts.find(c => c.id === state.editingCastId);
           if (target) {
+            const oldName = target.name;
             target.name = name;
-            target.fullName = subName ? `${name} ${subName}` : name;
-            target.subName = subName;
+            target.fullName = name;
             target.factionId = factionId;
             target.categoryName = fName;
-            target.rawFaction = rawFaction;
+            target.rawFaction = fName;
             target.actor = actor;
-            target.title = `No.${String(target.no).padStart(2, "0")}｜${rawFaction}｜演者：${actor}`;
+            target.title = `No.${String(target.no).padStart(2, "0")}｜${fName}｜演者：${actor}`;
             target.quote = quote;
+            target.xUrl = xUrl;
             target.shortBio = (paragraphs[0] || "").slice(0, 110);
             target.image = imageVal;
             target.story = paragraphs;
-            target.serviceStyle = service;
+            if (oldName !== name) {
+              state.reports.forEach(r => {
+                if (Array.isArray(r.casts)) {
+                  r.casts = r.casts.map(cn => cn === oldName ? name : cn);
+                }
+              });
+            }
             saveStateToStorage();
             updateHeroCounts();
             populateActorFilter();
@@ -2611,10 +3029,12 @@
             renderCastFilterTabs();
             renderCasts();
             renderActorCrossTable();
+            renderReports();
+            renderReportCastCheckboxes(getCheckedReportCastNames());
             updateAdminPreviews();
             const fb = document.getElementById("addCastFeedback");
             fb.textContent = `✓ No.${String(target.no).padStart(2, "0")}「${name}」の編集内容を上書き保存しました！`;
-            showGlobalAdminFeedback(`✓「${name}」のプロフィールを更新しました（ブラウザに自動保存済み）`);
+            showGlobalAdminFeedback(`✓「${name}」のプロフィールを更新しました（営業記録の参加キャスト一覧にも同期済み）`);
             setTimeout(() => { fb.textContent = ""; }, 3500);
             return;
           }
@@ -2626,21 +3046,22 @@
           id: "cast-" + String(newNo).padStart(2, "0"),
           no: newNo,
           name,
-          fullName: subName ? `${name} ${subName}` : name,
-          subName,
+          fullName: name,
+          subName: "",
           romaji: `ENTRY No.${String(newNo).padStart(2, "0")} / ACTOR: ${actor}`,
           actor,
           factionId,
           categoryName: fName,
-          rawFaction,
-          title: `No.${String(newNo).padStart(2, "0")}｜${rawFaction}｜演者：${actor}`,
+          rawFaction: fName,
+          title: `No.${String(newNo).padStart(2, "0")}｜${fName}｜演者：${actor}`,
           quote,
+          xUrl,
           shortBio: (paragraphs[0] || "").slice(0, 110),
           image: imageVal,
-          tags: [`No.${String(newNo).padStart(2, "0")}`, rawFaction, `演者:${actor}`],
+          tags: [`No.${String(newNo).padStart(2, "0")}`, fName, `演者:${actor}`],
           story: paragraphs,
-          serviceStyle: service,
-          favoriteTopics: [`所属カテゴリー：${rawFaction}`, `演者：${actor}`],
+          serviceStyle: "",
+          favoriteTopics: [],
           ngItems: []
         };
 
@@ -2654,11 +3075,12 @@
         renderCastFilterTabs();
         renderCasts();
         renderActorCrossTable();
+        renderReportCastCheckboxes(getCheckedReportCastNames());
         updateAdminPreviews();
         loadCastIntoEditor(newCast.id);
 
         const fb = document.getElementById("addCastFeedback");
-        fb.textContent = `✓ 新規キャスト「${name}」（No.${String(newNo).padStart(2, "0")}）を登録しました！上のリストからいつでも再編集できます。`;
+        fb.textContent = `✓ 新規キャスト「${name}」（No.${String(newNo).padStart(2, "0")}）を登録しました！営業記録の参加キャスト選択にも自動追加されました。`;
         showGlobalAdminFeedback(`✓ 新規キャスト「${name}」を登録しました！`);
         setTimeout(() => { fb.textContent = ""; }, 3500);
       });
@@ -2679,9 +3101,51 @@
         renderCastFilterTabs();
         renderCasts();
         renderActorCrossTable();
+        renderReportCastCheckboxes(getCheckedReportCastNames());
         updateAdminPreviews();
         loadCastIntoEditor("NEW");
         showGlobalAdminFeedback(`✓ キャスト「${removedName}」を削除しました。`);
+      });
+
+      // Report Cast Checkboxes Select All / Clear All
+      document.getElementById("selectAllReportCastsBtn").addEventListener("click", () => {
+        document.querySelectorAll(".report-cast-checkbox").forEach(cb => { cb.checked = true; });
+      });
+      document.getElementById("clearAllReportCastsBtn").addEventListener("click", () => {
+        document.querySelectorAll(".report-cast-checkbox").forEach(cb => { cb.checked = false; });
+      });
+
+      // Report Image Upload Handlers
+      document.getElementById("newReportImageFiles").addEventListener("change", (e) => {
+        const files = Array.from(e.target.files || []);
+        if (files.length === 0) return;
+        files.forEach(file => {
+          compressImageFileToDataUri(file, 960, 0.85, (dataUri) => {
+            if (dataUri) {
+              state.editingReportImages.push(dataUri);
+              updateReportImagesPreviewUi();
+            }
+          });
+        });
+        e.target.value = "";
+      });
+
+      document.getElementById("addReportImageUrlBtn").addEventListener("click", () => {
+        const urlInput = document.getElementById("newReportImageUrl");
+        const val = (urlInput ? urlInput.value : "").trim();
+        if (!val) return;
+        state.editingReportImages.push(val);
+        urlInput.value = "";
+        updateReportImagesPreviewUi();
+      });
+
+      document.getElementById("clearNewReportImagesBtn").addEventListener("click", () => {
+        state.editingReportImages = [];
+        const filesInput = document.getElementById("newReportImageFiles");
+        const urlInput = document.getElementById("newReportImageUrl");
+        if (filesInput) filesInput.value = "";
+        if (urlInput) urlInput.value = "";
+        updateReportImagesPreviewUi();
       });
 
       // Report Selector & Save/Post
@@ -2694,42 +3158,42 @@
 
       document.getElementById("addReportPreviewBtn").addEventListener("click", () => {
         const date = document.getElementById("newReportDate").value.trim() || "2026.10.25";
-        const category = document.getElementById("newReportCategory").value.trim() || "通常営業レポート";
-        const title = document.getElementById("newReportTitle").value.trim() || "営業記録";
-        const castsRaw = document.getElementById("newReportCasts").value.trim();
+        const title = document.getElementById("newReportTitle").value.trim() || `${date} 営業記録`;
+        const castsList = getCheckedReportCastNames();
         const bodyRaw = document.getElementById("newReportBody").value.trim() || "今宵も多くの来訪者とともに穏やかなノクターンのひとときを過ごしました。";
-
-        const castsList = castsRaw ? castsRaw.split(/[,、]+/).map(s => s.trim()).filter(Boolean) : [];
         const bodyList = bodyRaw.split(/\n+/).map(s => s.trim()).filter(Boolean);
+        const imagesList = Array.isArray(state.editingReportImages) ? [...state.editingReportImages] : [];
 
         if (state.editingReportId && state.editingReportId !== "NEW") {
           const target = state.reports.find(r => r.id === state.editingReportId);
           if (target) {
             target.date = date;
-            target.category = category;
             target.title = title;
             target.casts = castsList;
+            target.images = imagesList;
             target.summary = bodyList[0] || "";
             target.body = bodyList;
             saveStateToStorage();
             renderReports();
             updateAdminPreviews();
+            updateAdminReportShareBox(target);
             const fb = document.getElementById("addReportFeedback");
-            fb.textContent = `✓「${title}」の修正を保存しました！`;
+            fb.textContent = `✓「${title}」の修正を保存しました！下のリンクからX告知が可能です。`;
             showGlobalAdminFeedback(`✓ 営業記録「${title}」を更新しました！`);
-            setTimeout(() => { fb.textContent = ""; }, 3500);
+            setTimeout(() => { fb.textContent = ""; }, 4000);
             return;
           }
         }
 
-        const slug = date.replace(/\./g, "-") + "-report-" + String(state.reports.length + 1);
+        const slug = date.replace(/[^0-9a-zA-Z]/g, "-") + "-report-" + String(Date.now()).slice(-5);
         const newReport = {
           id: slug,
           date,
           title,
-          category,
+          category: "営業記録",
           markdownSource: `content/reports/${slug}.md`,
           casts: castsList,
+          images: imagesList,
           summary: bodyList[0] || "",
           body: bodyList,
           gallery: []
@@ -2741,11 +3205,37 @@
         renderReports();
         updateAdminPreviews();
         loadReportIntoEditor(newReport.id);
+        updateAdminReportShareBox(newReport);
 
         const fb = document.getElementById("addReportFeedback");
-        fb.textContent = `✓「${title}」を営業記録に投稿しました！`;
+        fb.textContent = `✓「${title}」を営業記録に投稿しました！下の専用リンクから公式Xで告知できます。`;
         showGlobalAdminFeedback(`✓ 新しい営業記録「${title}」を投稿しました！`);
-        setTimeout(() => { fb.textContent = ""; }, 3500);
+        setTimeout(() => { fb.textContent = ""; }, 4000);
+      });
+
+      // Copy Report Direct Link & Announcement Text in Admin Panel
+      document.getElementById("copyAdminReportLinkBtn").addEventListener("click", () => {
+        const linkInput = document.getElementById("adminReportDirectLinkInput");
+        if (!linkInput || !linkInput.value) return;
+        copyTextToClipboard(linkInput.value, () => {
+          const st = document.getElementById("adminReportShareStatus");
+          if (st) {
+            st.textContent = "✓ 専用リンクをコピーしました！";
+            setTimeout(() => { st.textContent = ""; }, 2500);
+          }
+        });
+      });
+
+      document.getElementById("copyAdminReportAnnounceTextBtn").addEventListener("click", () => {
+        const r = state.reports.find(item => item.id === state.editingReportId);
+        if (!r) return;
+        copyTextToClipboard(buildReportAnnounceText(r), () => {
+          const st = document.getElementById("adminReportShareStatus");
+          if (st) {
+            st.textContent = "✓ X告知文＋専用リンクをコピーしました！";
+            setTimeout(() => { st.textContent = ""; }, 2500);
+          }
+        });
       });
 
       document.getElementById("deleteSelectedReportBtn").addEventListener("click", () => {
@@ -2776,6 +3266,7 @@
         renderCategoryBanner();
         renderCastFilterTabs();
         renderCasts();
+        renderReportCastCheckboxes(getCheckedReportCastNames());
         updateAdminPreviews();
 
         const fb = document.getElementById("factionSaveFeedback");
@@ -2796,6 +3287,7 @@
         renderCategoryBanner();
         renderCastFilterTabs();
         renderCasts();
+        renderReportCastCheckboxes(getCheckedReportCastNames());
         updateAdminPreviews();
       });
 
@@ -2865,8 +3357,9 @@
         renderCasts();
         renderActorCrossTable();
         renderReports();
+        renderReportCastCheckboxes([]);
         updateAdminPreviews();
-        showGlobalAdminFeedback("✓ ブラウザの保存データを初期状態（0名）にリセットしました。");
+        showGlobalAdminFeedback("✓ ブラウザの保存データを初期状態（キャスト0名・営業記録0件）にリセットしました。");
       });
 
       document.addEventListener("keydown", (e) => {
