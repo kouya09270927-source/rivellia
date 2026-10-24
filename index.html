@@ -1152,11 +1152,11 @@
       </div>
 
       <!-- Quick Status Feedback Banner inside Admin Modal -->
-      <div id="adminGlobalFeedbackBar" class="hidden px-6 py-2.5 bg-emerald-950/80 border-b border-emerald-400/30 text-xs text-emerald-200 font-medium"></div>
+      <div id="adminGlobalFeedbackBar" class="px-6 py-2.5 bg-emerald-950/80 border-b border-emerald-400/30 text-xs text-emerald-200 font-medium hidden">✓ 更新済みの index.html 全文をコピーしました！GitHubにそのまま貼り付けて更新できます。</div>
 
       <!-- Admin Modal Tabs -->
       <div class="px-6 pt-4 bg-[#0e0e17] border-b border-[#d4af37]/20 flex flex-wrap gap-2">
-        <button type="button" data-admin-tab="tab-add-cast" class="admin-tab-btn px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold bg-[#d4af37] text-[#09090d]">
+        <button type="button" data-admin-tab="tab-add-cast" class="admin-tab-btn px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-medium bg-[#161622] text-[#ece6d9] hover:text-[#f0d78c]">
           1. キャスト編集・新規登録
         </button>
         <button type="button" data-admin-tab="tab-add-report" class="admin-tab-btn px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-medium bg-[#161622] text-[#ece6d9] hover:text-[#f0d78c]">
@@ -1168,7 +1168,7 @@
         <button type="button" data-admin-tab="tab-factions" class="admin-tab-btn px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-medium bg-[#161622] text-[#ece6d9] hover:text-[#f0d78c]">
           4. 陣営名の設定
         </button>
-        <button type="button" data-admin-tab="tab-deploy" class="admin-tab-btn px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-medium bg-[#161622] text-[#ece6d9] hover:text-[#f0d78c]">
+        <button type="button" data-admin-tab="tab-deploy" class="admin-tab-btn px-4 py-2.5 rounded-t-xl text-xs sm:text-sm font-semibold bg-[#d4af37] text-[#09090d]">
           5. GitHubへの反映（コード編集不要）
         </button>
       </div>
@@ -1178,7 +1178,7 @@
              TAB 1 (tab-add-cast): Streamlined Cast Form
              Items: キャスト名（必須）, 所属カテゴリー, 演者名, Xのリンク, 一言セリフ, キャスト画像, 自己紹介文
              ======================================================= -->
-        <div id="tab-add-cast" class="admin-tab-panel space-y-6">
+        <div id="tab-add-cast" class="admin-tab-panel space-y-6 hidden">
 
           <!-- Visual List of Registered Casts for Quick Later Editing -->
           <div class="p-5 rounded-2xl bg-[#0b0b14] border border-[#d4af37]/30 space-y-3">
@@ -1832,7 +1832,7 @@ casts:
         </div>
 
         <!-- TAB 4 (tab-deploy): One-Click GitHub Sync without editing code -->
-        <div id="tab-deploy" class="admin-tab-panel hidden space-y-5">
+        <div id="tab-deploy" class="admin-tab-panel space-y-5">
           <div class="p-6 rounded-2xl bg-[#10101a] border border-[#d4af37]/35 space-y-4">
             <h4 class="font-serif-jp text-base sm:text-lg font-bold text-[#f0d78c]">
               コードを一切触らずに GitHub Pages へ反映する方法
@@ -1854,7 +1854,7 @@ casts:
                 ブラウザ保存データを初期状態に戻す
               </button>
             </div>
-            <p id="exportHtmlFeedback" class="text-xs text-emerald-300 font-medium"></p>
+            <p id="exportHtmlFeedback" class="text-xs text-emerald-300 font-medium">✓ 更新済みの index.html 全文をクリップボードにコピーしました！</p>
           </div>
         </div>
       </div>
