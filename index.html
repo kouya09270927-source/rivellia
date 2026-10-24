@@ -575,30 +575,88 @@
     </section>
 
     <!-- ==========================================
-         4. 営業記録・アーカイブ (Report / Archive) ★画像＆X告知リンク対応
+         4. 営業記録・アーカイブ (Report / Archive) ★リスト化・スクロール枠・表示件数切替・画像＆X告知リンク対応
          ========================================== -->
     <section id="sec-archive" class="page-section py-16 sm:py-24 border-b border-[#d4af37]/20">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <!-- Header: Title + Total Badge + View Mode Toggle + Admin Post Button -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[#d4af37]/25 pb-5">
           <div>
             <span class="font-display text-xs tracking-[0.3em] text-[#d4af37] uppercase">SALON REPORT</span>
-            <h2 class="font-serif-jp text-2xl sm:text-4xl font-bold text-[#f7f2e6] mt-2">
-              営業記録・アーカイブ
+            <h2 class="font-serif-jp text-2xl sm:text-4xl font-bold text-[#f7f2e6] mt-1 flex flex-wrap items-center gap-3">
+              <span>営業記録・アーカイブ</span>
+              <span id="reportsTotalBadge" class="text-xs font-sans font-semibold px-3 py-1 rounded-full bg-[#141422] text-[#f0d78c] border border-[#d4af37]/35 whitespace-nowrap">0件</span>
             </h2>
+            <p class="text-xs sm:text-sm text-[#b5ae9e] mt-2">
+              サロンでの営業記録アーカイブです。枠内でスクロールして閲覧でき、表示件数やリスト／カード表示の切り替え、参加キャストでの絞り込みが可能です。
+            </p>
           </div>
-          <div class="flex flex-wrap items-center gap-3 self-start">
-            <select id="reportCastFilterSelect" aria-label="参加キャストで絞り込み" class="px-4 py-2.5 rounded-xl bg-[#11111a] border border-[#d4af37]/35 text-xs sm:text-sm text-[#ece6d9] focus:outline-none focus:border-[#d4af37]">
-              <option value="ALL">すべての参加キャストで表示</option>
-            </select>
-            <button id="openAddReportModalBtn" type="button" class="hidden admin-only-control inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#d4af37] text-[#09090d] text-xs font-bold hover:brightness-110 transition">
+
+          <div class="flex flex-wrap items-center gap-2.5 self-start md:self-end">
+            <!-- View Mode Toggle (List vs Card) -->
+            <div class="inline-flex rounded-xl bg-[#0e0e16] p-1 border border-[#d4af37]/25">
+              <button id="repViewListBtn" type="button" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#d4af37] text-[#09090d] transition">☰ リスト表示</button>
+              <button id="repViewCardBtn" type="button" class="px-3 py-1.5 rounded-lg text-xs font-medium text-[#c7bfa8] hover:text-[#f5efe2] transition">🖼️ カード表示</button>
+            </div>
+
+            <button id="openAddReportModalBtn" type="button" class="hidden admin-only-control inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#b89028] via-[#d4af37] to-[#b89028] text-[#09090d] text-xs sm:text-sm font-bold hover:brightness-110 transition shadow-md whitespace-nowrap">
               <span>＋ 営業記録を投稿</span>
             </button>
           </div>
         </div>
 
-        <div id="reportsContainer" class="space-y-8">
-          <!-- Populated dynamically by renderReports() -->
+        <!-- Archive Control Bar (Cast Filter + Per-Page Display Count Selector + Keyword Search + Pagination) -->
+        <div class="card-nocturne rounded-3xl p-5 sm:p-6 space-y-4">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div class="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
+              <select id="reportCastFilterSelect" aria-label="参加キャストで絞り込み" class="px-3.5 py-2 rounded-xl bg-[#08080c] border border-[#d4af37]/30 text-xs sm:text-sm text-[#ece6d9] focus:outline-none focus:border-[#d4af37]">
+                <option value="ALL">すべての参加キャストで表示</option>
+              </select>
+
+              <select id="repPageSizeSelect" aria-label="営業記録の1ページ表示件数" class="px-3.5 py-2 rounded-xl bg-[#08080c] border border-[#d4af37]/30 text-xs sm:text-sm text-[#f0d78c] focus:outline-none focus:border-[#d4af37]">
+                <option value="5" selected>5件ずつ表示</option>
+                <option value="10">10件ずつ表示</option>
+                <option value="20">20件ずつ表示</option>
+                <option value="999">全件表示</option>
+              </select>
+            </div>
+
+            <div class="relative flex-1 sm:w-64 lg:max-w-xs">
+              <input id="repSearchInput" type="search" placeholder="タイトル・本文・キャスト名で検索..." class="w-full pl-3.5 pr-8 py-2 rounded-xl bg-[#08080c] border border-[#d4af37]/30 text-xs sm:text-sm text-[#f5efe2] placeholder-[#787163] focus:outline-none focus:border-[#d4af37]">
+              <button id="clearRepSearchBtn" type="button" aria-label="検索クリア" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-[#9c9480] hover:text-[#f0d78c] px-1">✕</button>
+            </div>
+          </div>
+
+          <!-- Active Filter Status & Top Pagination Bar -->
+          <div class="pt-3 border-t border-[#d4af37]/15 flex flex-wrap items-center justify-between gap-3 text-xs text-[#b5ae9e]">
+            <div id="repFilterStatus">全営業記録を表示中</div>
+            <div id="repPaginationTop" class="flex flex-wrap items-center gap-1.5"></div>
+          </div>
         </div>
+
+        <!-- Dedicated Scrollable Archive Frame (Prevents page from growing excessively long) -->
+        <div class="rounded-3xl bg-[#0b0b14]/95 border border-[#d4af37]/35 shadow-2xl overflow-hidden">
+          <!-- Frame Top Header Bar -->
+          <div class="px-5 py-3 bg-[#10101c] border-b border-[#d4af37]/20 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="flex items-center gap-2 text-[#f0d78c] font-semibold">
+              <span class="w-2 h-2 rounded-full bg-[#d4af37] inline-block"></span>
+              <span>Salon Report Archive — 営業記録一覧</span>
+            </div>
+            <div class="text-[11px] text-[#9c9480]">
+              ↕ 枠内でスクロールして閲覧できます（写真クリックで拡大）
+            </div>
+          </div>
+
+          <!-- Scrollable Viewport -->
+          <div id="reportsScrollViewport" class="max-h-[640px] overflow-y-auto p-4 sm:p-6">
+            <div id="reportsContainer" class="space-y-3">
+              <!-- Populated dynamically by renderReports() -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Pagination Bar -->
+        <div id="repPaginationBottom" class="pt-2 flex flex-wrap items-center justify-center gap-2"></div>
       </div>
     </section>
 
@@ -1706,6 +1764,10 @@
       editingReportImages: [],
       editingTimelinePostId: "NEW",
       selectedReportCast: "ALL",
+      repSearchQuery: "",
+      repViewMode: "list",
+      repCurrentPage: 1,
+      repPageSize: 5,
       highlightedReportId: null,
       highlightedTimelinePostId: null,
       isAdminAuthenticated: false,
@@ -2054,6 +2116,8 @@
         "castPaginationBottom",
         "actorCrossTableBody",
         "reportsContainer",
+        "repPaginationTop",
+        "repPaginationBottom",
         "xTimelineFeedContainer",
         "inSiteTimelineContainer",
         "tlPaginationTop",
@@ -2938,13 +3002,16 @@
     // ---------------------------------------------------------
     function populateReportCastFilter() {
       const select = document.getElementById("reportCastFilterSelect");
+      if (!select) return;
       const castNames = new Set();
       state.reports.forEach(r => (r.casts || []).forEach(n => castNames.add(n)));
+      state.casts.forEach(c => { if (c.name) castNames.add(c.name); });
 
       const currentVal = state.selectedReportCast;
-      select.innerHTML = `<option value="ALL">すべての参加キャストで表示 (${state.reports.length}件)</option>` +
+      select.innerHTML = `<option value="ALL">すべての参加キャスト（全${state.reports.length}件）</option>` +
         Array.from(castNames).map(name => `<option value="${escapeHtml(name)}">参加キャスト：${escapeHtml(name)}</option>`).join("");
       select.value = castNames.has(currentVal) ? currentVal : "ALL";
+      state.selectedReportCast = select.value;
     }
 
     function openLightbox(imgSrc, titleText) {
@@ -2960,17 +3027,131 @@
       document.getElementById("galleryLightboxModal").classList.add("hidden");
     }
 
+    function getFilteredReports() {
+      const q = (state.repSearchQuery || "").trim().toLowerCase();
+      return state.reports.filter(r => {
+        if (state.selectedReportCast !== "ALL" && !(r.casts || []).includes(state.selectedReportCast)) {
+          return false;
+        }
+        if (q) {
+          const hay = [
+            r.title || "",
+            r.date || "",
+            ...(r.casts || []),
+            ...(r.body || [])
+          ].join(" ").toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+    }
+
+    function buildReportsPaginationHtml(totalItems, totalPages) {
+      if (totalPages <= 1) return "";
+      let buttons = [];
+      buttons.push(`
+        <button type="button" data-rep-goto-page="${Math.max(1, state.repCurrentPage - 1)}" ${state.repCurrentPage === 1 ? "disabled" : ""}
+                class="rep-page-num-btn px-3 py-1.5 rounded-lg border border-[#d4af37]/30 text-xs ${state.repCurrentPage === 1 ? "opacity-40 cursor-not-allowed bg-[#0c0c12] text-[#787163]" : "bg-[#141420] hover:bg-[#d4af37]/20 text-[#f0d78c]"}">
+          ← 前へ
+        </button>
+      `);
+      for (let p = 1; p <= totalPages; p++) {
+        const active = p === state.repCurrentPage;
+        buttons.push(`
+          <button type="button" data-rep-goto-page="${p}"
+                  class="rep-page-num-btn px-3 py-1.5 rounded-lg border text-xs font-semibold transition ${active ? "bg-[#d4af37] text-[#09090d] border-[#d4af37]" : "bg-[#12121c] hover:bg-[#1e1e2e] text-[#ece6d9] border-[#d4af37]/30"}">
+            ${p}
+          </button>
+        `);
+      }
+      buttons.push(`
+        <button type="button" data-rep-goto-page="${Math.min(totalPages, state.repCurrentPage + 1)}" ${state.repCurrentPage === totalPages ? "disabled" : ""}
+                class="rep-page-num-btn px-3 py-1.5 rounded-lg border border-[#d4af37]/30 text-xs ${state.repCurrentPage === totalPages ? "opacity-40 cursor-not-allowed bg-[#0c0c12] text-[#787163]" : "bg-[#141420] hover:bg-[#d4af37]/20 text-[#f0d78c]"}">
+          次へ →
+        </button>
+      `);
+      return buttons.join("");
+    }
+
+    function bindReportsPaginationButtons(containerEl) {
+      if (!containerEl) return;
+      containerEl.querySelectorAll(".rep-page-num-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const targetPage = parseInt(btn.getAttribute("data-rep-goto-page"), 10);
+          if (!isNaN(targetPage) && targetPage !== state.repCurrentPage) {
+            state.repCurrentPage = targetPage;
+            renderReports();
+            const viewport = document.getElementById("reportsScrollViewport");
+            if (viewport) viewport.scrollTo({ top: 0, behavior: "smooth" });
+          }
+        });
+      });
+    }
+
+    function updateReportsViewToggleButtons() {
+      const listBtn = document.getElementById("repViewListBtn");
+      const cardBtn = document.getElementById("repViewCardBtn");
+      if (!listBtn || !cardBtn) return;
+      if (state.repViewMode === "list") {
+        listBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#d4af37] text-[#09090d] transition";
+        cardBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium text-[#c7bfa8] hover:text-[#f5efe2] transition";
+      } else {
+        cardBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#d4af37] text-[#09090d] transition";
+        listBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium text-[#c7bfa8] hover:text-[#f5efe2] transition";
+      }
+    }
+
     function renderReports() {
       populateReportCastFilter();
+      updateReportsViewToggleButtons();
+
       const container = document.getElementById("reportsContainer");
+      const badge = document.getElementById("reportsTotalBadge");
+      const statusEl = document.getElementById("repFilterStatus");
+      const topPagEl = document.getElementById("repPaginationTop");
+      const bottomPagEl = document.getElementById("repPaginationBottom");
+      if (!container) return;
+
+      if (badge) badge.textContent = `${state.reports.length}件`;
+
+      const filtered = getFilteredReports();
+      const totalItems = filtered.length;
+      const pageSize = Number(state.repPageSize) || 5;
+      const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+      if (state.repCurrentPage > totalPages) state.repCurrentPage = totalPages;
+      if (state.repCurrentPage < 1) state.repCurrentPage = 1;
+
+      const startIdx = (state.repCurrentPage - 1) * pageSize;
+      const pagedReports = filtered.slice(startIdx, startIdx + pageSize);
+
+      const rangeText = totalItems > 0
+        ? `${startIdx + 1}〜${Math.min(totalItems, startIdx + pageSize)}件目を表示中（全${totalItems}件）`
+        : "0件";
+
+      if (statusEl) {
+        statusEl.textContent = `営業記録：${rangeText}`
+          + (state.selectedReportCast !== "ALL" ? `｜参加キャスト: ${state.selectedReportCast}` : "")
+          + (state.repSearchQuery ? `｜検索: "${state.repSearchQuery}"` : "");
+      }
+
+      const pagHtml = buildReportsPaginationHtml(totalItems, totalPages);
+      if (topPagEl) {
+        topPagEl.innerHTML = pagHtml;
+        bindReportsPaginationButtons(topPagEl);
+      }
+      if (bottomPagEl) {
+        bottomPagEl.innerHTML = pagHtml;
+        bindReportsPaginationButtons(bottomPagEl);
+      }
 
       if (state.reports.length === 0) {
+        container.className = "space-y-3";
         container.innerHTML = `
-          <div class="card-nocturne rounded-3xl p-10 sm:p-14 text-center space-y-4">
-            <p class="font-serif-jp text-lg sm:text-xl text-[#f0d78c]">現在投稿されている営業記録はありません</p>
-            <p class="text-xs sm:text-sm text-[#b5ae9e]">管理者ログイン後、管理画面から営業記録（写真・参加キャスト選択・本文）を投稿するとここに一覧表示され、公式X告知用の専用リンクも発行されます。</p>
+          <div class="rounded-2xl bg-[#11111d] border border-[#d4af37]/20 p-8 sm:p-10 text-center space-y-3">
+            <p class="font-serif-jp text-base sm:text-lg text-[#f0d78c]">現在投稿されている営業記録はありません</p>
+            <p class="text-xs sm:text-sm text-[#9c9480]">管理者ログイン後、管理画面から営業記録（写真・参加キャスト選択・本文）を投稿するとここにリスト表示され、公式X告知用の専用リンクも発行されます。</p>
             <div class="pt-2">
-              <button id="emptyStatePostReportBtn" type="button" class="px-6 py-3 rounded-xl bg-gradient-to-r from-[#b89028] via-[#d4af37] to-[#b89028] text-[#09090d] font-bold text-xs sm:text-sm hover:brightness-110 transition shadow-lg">
+              <button id="emptyStatePostReportBtn" type="button" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#b89028] via-[#d4af37] to-[#b89028] text-[#09090d] font-bold text-xs sm:text-sm hover:brightness-110 transition shadow-lg">
                 ${state.isAdminAuthenticated ? "＋ 新しい営業記録を投稿する" : "🔒 管理者ログインして営業記録を投稿する"}
               </button>
             </div>
@@ -2987,36 +3168,131 @@
         return;
       }
 
-      const filtered = state.reports.filter(r => {
-        if (state.selectedReportCast === "ALL") return true;
-        return (r.casts || []).includes(state.selectedReportCast);
-      });
+      if (filtered.length === 0) {
+        container.className = "space-y-3";
+        container.innerHTML = `
+          <div class="rounded-2xl bg-[#11111d] border border-[#d4af37]/20 p-8 text-center space-y-3">
+            <p class="font-serif-jp text-base sm:text-lg text-[#f0d78c]">条件に一致する営業記録が見つかりませんでした</p>
+            <button id="resetReportFilterBtn" type="button" class="px-4 py-2 rounded-xl bg-[#d4af37] text-[#09090d] font-bold text-xs">
+              フィルターを解除
+            </button>
+          </div>
+        `;
+        const resetBtn = document.getElementById("resetReportFilterBtn");
+        if (resetBtn) {
+          resetBtn.addEventListener("click", () => {
+            state.selectedReportCast = "ALL";
+            state.repSearchQuery = "";
+            state.repCurrentPage = 1;
+            const sel = document.getElementById("reportCastFilterSelect");
+            if (sel) sel.value = "ALL";
+            const inp = document.getElementById("repSearchInput");
+            if (inp) inp.value = "";
+            const clr = document.getElementById("clearRepSearchBtn");
+            if (clr) clr.classList.add("hidden");
+            renderReports();
+          });
+        }
+        return;
+      }
 
-      container.innerHTML = filtered.map(r => {
+      const isListMode = state.repViewMode === "list";
+      container.className = isListMode ? "divide-y divide-[#d4af37]/20" : "space-y-6";
+
+      container.innerHTML = pagedReports.map(r => {
         const isHighlighted = state.highlightedReportId === r.id;
-        const editRepBtn = state.isAdminAuthenticated
-          ? `<button type="button" data-edit-report="${escapeHtml(r.id)}" class="edit-report-card-btn px-3.5 py-1.5 rounded-xl bg-[#d4af37] text-[#09090d] text-xs font-bold hover:brightness-110 transition">✎ 編集する</button>`
-          : "";
-        const castsRowHtml = (r.casts && r.casts.length > 0)
-          ? `<div class="flex flex-wrap items-center gap-2 pt-1">
-               <span class="text-xs text-[#b5ae9e]">参加キャスト:</span>
+        const imagesList = Array.isArray(r.images) ? r.images : [];
+        const xIntentUrl = buildReportXIntentUrl(r);
+        const bodyTextJoined = (r.body || []).join("\n\n");
+
+        const castsChipsHtml = (r.casts && r.casts.length > 0)
+          ? `<div class="flex flex-wrap items-center gap-1.5 pt-1">
+               <span class="text-[11px] text-[#9c9480]">参加キャスト:</span>
                ${(r.casts || []).map(cName => {
                  const matchedCast = state.casts.find(c => c.name === cName || c.fullName === cName);
                  if (matchedCast) {
-                   return `<button type="button" data-open-cast="${escapeHtml(matchedCast.id)}" class="report-cast-chip px-3 py-1 rounded-full bg-[#151522] hover:bg-[#d4af37]/25 text-xs text-[#f0d78c] border border-[#d4af37]/40 transition">✦ ${escapeHtml(cName)}</button>`;
+                   return `<button type="button" data-open-cast="${escapeHtml(matchedCast.id)}" class="report-cast-chip px-2.5 py-0.5 rounded-full bg-[#151522] hover:bg-[#d4af37]/25 text-[11px] text-[#f0d78c] border border-[#d4af37]/35 transition">✦ ${escapeHtml(cName)}</button>`;
                  }
-                 return `<span class="px-3 py-1 rounded-full bg-[#151522] text-xs text-[#d8d0c0] border border-[#d4af37]/20">✦ ${escapeHtml(cName)}</span>`;
+                 return `<span class="px-2.5 py-0.5 rounded-full bg-[#151522] text-[11px] text-[#d8d0c0] border border-[#d4af37]/20">✦ ${escapeHtml(cName)}</span>`;
                }).join("")}
              </div>`
           : "";
 
-        const imagesList = Array.isArray(r.images) ? r.images : [];
+        if (isListMode) {
+          // COMPACT LIST VIEW (Default: clean list row with compact thumbnails & actions)
+          const compactImagesHtml = imagesList.length > 0
+            ? `<div class="pt-2 flex flex-wrap items-center gap-2.5">
+                 ${imagesList.map((imgSrc, i) => `
+                   <div class="relative group rounded-xl overflow-hidden border border-[#d4af37]/35 bg-[#07070c] shrink-0">
+                     <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(r.title)} (${i + 1})"
+                          data-lightbox-src="${escapeHtml(imgSrc)}" data-lightbox-title="${escapeHtml(r.title)}"
+                          class="report-photo-thumb h-20 w-28 sm:h-24 sm:w-36 object-cover cursor-pointer group-hover:scale-105 transition">
+                     <span class="pointer-events-none absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-black/75 text-[10px] text-[#f0d78c] border border-[#d4af37]/30">🔍 拡大</span>
+                   </div>
+                 `).join("")}
+               </div>`
+            : "";
+
+          const adminActionsHtml = state.isAdminAuthenticated
+            ? `<div class="flex items-center gap-1.5">
+                 <button type="button" data-edit-report="${escapeHtml(r.id)}" class="edit-report-card-btn px-2.5 py-1 rounded-lg bg-[#d4af37] text-[#09090d] text-[11px] font-bold hover:brightness-110 transition">✎ 編集</button>
+                 <button type="button" data-del-report="${escapeHtml(r.id)}" class="del-report-card-btn px-2 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/35 text-rose-200 border border-rose-400/35 text-[11px] transition">削除</button>
+               </div>`
+            : "";
+
+          return `
+            <article id="report-${escapeHtml(r.id)}" class="py-4 px-3 sm:px-4 hover:bg-[#121220]/70 transition rounded-2xl ${isHighlighted ? "report-highlight-ring" : ""}">
+              <div class="space-y-2">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <div class="flex flex-wrap items-center gap-2.5 min-w-0">
+                    <time class="font-display text-xs sm:text-sm font-bold text-[#f0d78c] px-2.5 py-0.5 rounded-lg bg-[#d4af37]/15 border border-[#d4af37]/35 shrink-0">
+                      ${escapeHtml(r.date)}
+                    </time>
+                    <h3 class="font-serif-jp text-base sm:text-lg font-bold text-[#f7f2e6]">
+                      ${escapeHtml(r.title)}
+                    </h3>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#141422] text-[#f0d78c] border border-[#d4af37]/30 shrink-0">営業記録</span>
+                </div>
+
+                ${castsChipsHtml}
+
+                <div class="text-xs sm:text-sm text-[#ece6d9] leading-relaxed whitespace-pre-line break-words bg-[#09090f]/80 p-3.5 rounded-xl border border-[#d4af37]/15">${escapeHtml(bodyTextJoined)}</div>
+
+                ${compactImagesHtml}
+
+                <div class="pt-1.5 flex flex-wrap items-center justify-between gap-2">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" data-copy-report-link="${escapeHtml(r.id)}" class="copy-report-link-btn px-2.5 py-1 rounded-lg bg-[#141422] hover:bg-[#222236] border border-[#d4af37]/30 text-[11px] text-[#f0d78c] transition inline-flex items-center gap-1">
+                      <span>🔗</span>
+                      <span class="copy-report-link-label">この記録のリンクをコピー</span>
+                    </button>
+                    <a href="${escapeHtml(xIntentUrl)}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-[#141422] hover:bg-[#d4af37] text-[#f0d78c] hover:text-[#09090d] border border-[#d4af37]/35 text-[11px] font-semibold transition inline-flex items-center gap-1">
+                      <span>𝕏</span>
+                      <span>Xで告知ポスト</span>
+                    </a>
+                  </div>
+                  ${adminActionsHtml}
+                </div>
+              </div>
+            </article>
+          `;
+        }
+
+        // CARD VIEW (Full size card layout when toggled to 🖼️ カード表示)
+        const editRepBtn = state.isAdminAuthenticated
+          ? `<div class="inline-flex items-center gap-1.5">
+               <button type="button" data-edit-report="${escapeHtml(r.id)}" class="edit-report-card-btn px-3.5 py-1.5 rounded-xl bg-[#d4af37] text-[#09090d] text-xs font-bold hover:brightness-110 transition">✎ 編集する</button>
+               <button type="button" data-del-report="${escapeHtml(r.id)}" class="del-report-card-btn px-2.5 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/35 text-rose-200 border border-rose-400/35 text-xs transition">削除</button>
+             </div>`
+          : "";
+
         let imagesHtml = "";
         if (imagesList.length === 1) {
           imagesHtml = `
             <div class="pt-2">
               <img src="${escapeHtml(imagesList[0])}" alt="${escapeHtml(r.title)}" data-lightbox-src="${escapeHtml(imagesList[0])}" data-lightbox-title="${escapeHtml(r.title)}"
-                   class="report-photo-thumb max-h-[460px] w-auto max-w-full rounded-2xl border border-[#d4af37]/35 object-contain mx-auto cursor-pointer hover:brightness-105 transition">
+                   class="report-photo-thumb max-h-[420px] w-auto max-w-full rounded-2xl border border-[#d4af37]/35 object-contain mx-auto cursor-pointer hover:brightness-105 transition">
             </div>
           `;
         } else if (imagesList.length > 1) {
@@ -3025,18 +3301,16 @@
               ${imagesList.map((imgSrc, i) => `
                 <div class="rounded-2xl overflow-hidden border border-[#d4af37]/35 bg-[#07070c]">
                   <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(r.title)} (${i + 1})" data-lightbox-src="${escapeHtml(imgSrc)}" data-lightbox-title="${escapeHtml(r.title)}"
-                       class="report-photo-thumb w-full h-64 object-cover cursor-pointer hover:scale-[1.01] transition">
+                       class="report-photo-thumb w-full h-56 object-cover cursor-pointer hover:scale-[1.01] transition">
                 </div>
               `).join("")}
             </div>
           `;
         }
 
-        const xIntentUrl = buildReportXIntentUrl(r);
-
         return `
-          <article id="report-${escapeHtml(r.id)}" class="card-nocturne rounded-3xl p-6 sm:p-8 lg:p-10 border border-[#d4af37]/30 space-y-5 ${isHighlighted ? "report-highlight-ring" : ""}">
-            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#d4af37]/20 pb-4">
+          <article id="report-${escapeHtml(r.id)}" class="card-nocturne rounded-3xl p-5 sm:p-7 border border-[#d4af37]/30 space-y-4 ${isHighlighted ? "report-highlight-ring" : ""}">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#d4af37]/20 pb-3.5">
               <div class="flex flex-wrap items-center gap-2.5">
                 <time class="font-display text-sm sm:text-base font-bold text-[#f0d78c] px-3.5 py-1 rounded-lg bg-[#d4af37]/15 border border-[#d4af37]/35">
                   ${escapeHtml(r.date)}
@@ -3055,16 +3329,16 @@
               </div>
             </div>
 
-            <div class="space-y-3">
+            <div class="space-y-2.5">
               <h3 class="font-serif-jp text-xl sm:text-2xl font-bold text-[#f7f2e6]">
                 ${escapeHtml(r.title)}
               </h3>
-              ${castsRowHtml}
+              ${castsChipsHtml}
             </div>
 
             ${imagesHtml}
 
-            <div class="reading-prose bg-[#09090f] p-5 sm:p-7 rounded-2xl border border-[#d4af37]/20">
+            <div class="reading-prose bg-[#09090f] p-5 sm:p-6 rounded-2xl border border-[#d4af37]/20">
               ${(r.body || []).map(p => `<p>${escapeHtml(p)}</p>`).join("")}
             </div>
           </article>
@@ -3102,6 +3376,21 @@
       container.querySelectorAll(".edit-report-card-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           openReportEditorFor(btn.getAttribute("data-edit-report"));
+        });
+      });
+
+      container.querySelectorAll(".del-report-card-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const repId = btn.getAttribute("data-del-report");
+          const idx = state.reports.findIndex(r => r.id === repId);
+          if (idx !== -1) {
+            state.reports.splice(idx, 1);
+            if (state.editingReportId === repId) state.editingReportId = "NEW";
+            saveStateToStorage();
+            renderReports();
+            renderTimeline();
+            updateAdminPreviews();
+          }
         });
       });
     }
@@ -3616,7 +3905,14 @@
         btn.addEventListener("click", () => {
           const repId = btn.getAttribute("data-jump-report");
           state.selectedReportCast = "ALL";
+          state.repSearchQuery = "";
           state.highlightedReportId = repId;
+          const allRep = getFilteredReports();
+          const repIdx = allRep.findIndex(r => r.id === repId);
+          if (repIdx !== -1) {
+            const pSize = Number(state.repPageSize) || 5;
+            state.repCurrentPage = Math.floor(repIdx / pSize) + 1;
+          }
           navigateToPageRoute("archive");
           renderReports();
           setTimeout(() => {
@@ -4329,7 +4625,14 @@
         }
         if (targetReportId && state.reports.some(r => r.id === targetReportId)) {
           state.selectedReportCast = "ALL";
+          state.repSearchQuery = "";
           state.highlightedReportId = targetReportId;
+          const allRep = getFilteredReports();
+          const repIdx = allRep.findIndex(r => r.id === targetReportId);
+          if (repIdx !== -1) {
+            const pSize = Number(state.repPageSize) || 5;
+            state.repCurrentPage = Math.floor(repIdx / pSize) + 1;
+          }
           navigateToPageRoute("archive");
           renderReports();
           setTimeout(() => {
@@ -4486,8 +4789,55 @@
 
       document.getElementById("reportCastFilterSelect").addEventListener("change", (e) => {
         state.selectedReportCast = e.target.value;
+        state.repCurrentPage = 1;
         renderReports();
       });
+
+      const repViewListBtn = document.getElementById("repViewListBtn");
+      const repViewCardBtn = document.getElementById("repViewCardBtn");
+      if (repViewListBtn) {
+        repViewListBtn.addEventListener("click", () => {
+          state.repViewMode = "list";
+          renderReports();
+        });
+      }
+      if (repViewCardBtn) {
+        repViewCardBtn.addEventListener("click", () => {
+          state.repViewMode = "card";
+          renderReports();
+        });
+      }
+
+      const repPageSizeSelect = document.getElementById("repPageSizeSelect");
+      if (repPageSizeSelect) {
+        repPageSizeSelect.addEventListener("change", (e) => {
+          state.repPageSize = parseInt(e.target.value, 10) || 5;
+          state.repCurrentPage = 1;
+          renderReports();
+        });
+      }
+
+      const repSearchInput = document.getElementById("repSearchInput");
+      const clearRepSearchBtn = document.getElementById("clearRepSearchBtn");
+      if (repSearchInput) {
+        repSearchInput.addEventListener("input", (e) => {
+          state.repSearchQuery = e.target.value || "";
+          state.repCurrentPage = 1;
+          if (clearRepSearchBtn) {
+            clearRepSearchBtn.classList.toggle("hidden", !state.repSearchQuery);
+          }
+          renderReports();
+        });
+      }
+      if (clearRepSearchBtn) {
+        clearRepSearchBtn.addEventListener("click", () => {
+          state.repSearchQuery = "";
+          state.repCurrentPage = 1;
+          if (repSearchInput) repSearchInput.value = "";
+          clearRepSearchBtn.classList.add("hidden");
+          renderReports();
+        });
+      }
 
       document.getElementById("copyHashtagBtn").addEventListener("click", () => {
         copyTextToClipboard("#リベリア_VRC", () => {
